@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://examplesite.com/posts/ciscn-web-filter/</loc>
+    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/posts/</loc>
+    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/</loc>
+    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/tags/rce/</loc>
+    <lastmod>2021-05-17T17:22:08+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/tags/</loc>
+    <lastmod>2021-05-17T17:22:08+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/posts/2021-5-17-youdiancms-rce-9-2-6/</loc>
+    <lastmod>2021-05-17T17:22:08+00:00</lastmod>
+  </url><url>
+    <loc>https://examplesite.com/archives/</loc>
+  </url><url>
+    <loc>https://examplesite.com/categories/</loc>
+  </url><url>
+    <loc>https://examplesite.com/search/</loc>
+  </url>
+</urlset>
