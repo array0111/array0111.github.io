@@ -296,7 +296,7 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>发现<code>cfgFile</code>被指向<code>Service</code>的<code>cfgFile</code>，也就是<code>svr.cfgFile</code>。全局搜索一下被用于哪些地方。</p>
-<!-- raw HTML omitted -->
+<p><img src="https://s2.loli.net/2022/12/21/k6JhnEyWpjMZ5Rg.png" alt=""></p>
 <p>基本都源于<code>admin_api.go</code>。一处一处分析。</p>
 <p>1.<code>client/admin_api.go:56</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>_, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(svr.cfgFile)
@@ -600,9 +600,9 @@
 </span></span></code></pre></div><p>代码到这里就实现完成了。</p>
 <p>最终大概就是。</p>
 <p><strong>配置文件</strong></p>
-<!-- raw HTML omitted -->
+<p><img src="https://s2.loli.net/2022/12/21/KqHjIJORGzgnYw4.png" alt=""></p>
 <p><strong>指定参数</strong></p>
-<!-- raw HTML omitted -->
+<p><img src="https://s2.loli.net/2022/12/21/cGzwmijPrsb5VEM.png" alt=""></p>
 
         </p>
     </div>
