@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #08F;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>frp浅改记录</title>
+    <meta name="description" content="web security | code review">
+    <meta name="keywords" content='blog, gokarna, hugo, frp, golang'>
+
+    <meta property="og:url" content="https://nullarray.top/posts/frp/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="frp浅改记录">
+    <meta property="og:description" content="web security | code review">
+    <meta property="og:image" content="https://s2.loli.net/2022/12/21/q7BNuCyn3O1a2Gb.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="frp浅改记录">
+    <meta name="twitter:description" content="web security | code review">
+    <meta property="twitter:domain" content="https://nullarray.top/posts/frp/">
+    <meta property="twitter:url" content="https://nullarray.top/posts/frp/">
+    <meta name="twitter:image" content="https://s2.loli.net/2022/12/21/q7BNuCyn3O1a2Gb.png">
+
+    
+    <link rel="canonical" href="https://nullarray.top/posts/frp/" />
+
+    <link rel="stylesheet" type="text/css" href="https://nullarray.top/css/normalize.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" type="text/css" href="https://nullarray.top/css/main.css">
+    <link disabled id="dark-theme" rel="stylesheet" href="https://nullarray.top/css/dark.css">
+
+    <script src="https://nullarray.top/js/svg-injector.min.js"></script>
+    <script src="https://nullarray.top/js/feather-icons.min.js"></script>
+    <script src="https://nullarray.top/js/main.js"></script>
+
+    
+    
+        <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css" integrity="sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js" integrity="sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+  
+    
+</head>
+<body>
+        <script type="text/javascript">
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="https://nullarray.top">
+                <img src="https://i.loli.net/2021/05/27/iSZvInqMko5AT7C.jpg" alt="avatar" />
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="https://nullarray.top">le3teq&#39;s Blog</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/"> Home </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/posts/"> Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/projects/"> Projects </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/tags/"> Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/lives/"> Lives </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top"><span data-feather='coffee'></span>  </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <a>
+                    <span id="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <a>
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/"> Home </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/posts/"> Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/projects/"> Projects </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/tags/"> Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/lives/"> Lives </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top"><span data-feather='coffee'></span>  </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <a>
+                        <span id="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>frp浅改记录</h1>
+        <small role="doc-subtitle"></small>
+        <p class="post-date">
+            November 22, 2022
+        </p>
+
+        <ul class="post-tags">
+        
+            <li class="post-tag"><a href="https://nullarray.top/tags/frp">frp</a></li>
+        
+            <li class="post-tag"><a href="https://nullarray.top/tags/golang">golang</a></li>
+        
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>
+            <p>frp改造已经有很多了，一开始用的@unknownsec师傅的modify，由于一些版本及其他一些原因，打算自己研究研究。</p>
+<h3 id="前言">前言</h3>
+<p>主要修改的无落地。参考网上的一些文章，发现都是直接硬修改（之前的配置文件功能会失效），包括版本问题导致用不了。这次修改打算在原有基础上添加指定参数，并进行<code>aes</code>加密，思路都是网上的，本次主要是实现软修改，不破坏之前的功能。</p>
+<h3 id="加载逻辑分析">加载逻辑分析</h3>
+<h5 id="文件解析">文件解析</h5>
+<p>入口文件在<code>cmd/frpc/main.go</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
+</span></span><span style="display:flex;"><span>	sub.<span style="color:#50fa7b">Execute</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>sub.Execute</code>来自于<code>cmd/frpc/sub/root.go:146</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Execute</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">:=</span> rootCmd.<span style="color:#50fa7b">Execute</span>(); err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		os.<span style="color:#50fa7b">Exit</span>(<span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>rootCmd.Execute</code>来自于<code>cmd/frpc/sub/root.go:100</code>,rootCmd是一个<code>cobra.Command</code>的重写接口，主要关注<code>RunE</code>的内容即可。关注主要内容如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">var</span> rootCmd = <span style="color:#ff79c6">&amp;</span>cobra.Command{
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">......</span>.
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> cfgDir <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">......</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#ff79c6">defer</span> wg.<span style="color:#50fa7b">Done</span>()
+</span></span><span style="display:flex;"><span>					err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">runClient</span>(path)
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">...</span>..
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// Do not show command usage here.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">runClient</span>(cfgFile)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>			fmt.<span style="color:#50fa7b">Println</span>(err)
+</span></span><span style="display:flex;"><span>			os.<span style="color:#50fa7b">Exit</span>(<span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>	},
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>runClient</code>用来启动frp客户端，代码中表示支持非当前目录文件。在<code>cmd/frpc/sub/root.go:192</code>跟进这个函数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">runClient</span>(cfgFilePath <span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>	cfg, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(cfgFilePath)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> err
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#50fa7b">startService</span>(cfg, pxyCfgs, visitorCfgs, cfgFilePath)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>传入的配置文件被<code>ParseClientConfig</code>解析，然后通过<code>startService</code>启动服务。这里我们先跟进<code>ParseClientConfig</code>函数</p>
+<p>在<code>pkg/config/parse.go:24</code>找到它。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">ParseClientConfig</span>(filePath <span style="color:#8be9fd">string</span>) (
+</span></span><span style="display:flex;"><span>	cfg ClientCommonConf,
+</span></span><span style="display:flex;"><span>	pxyCfgs <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]ProxyConf,
+</span></span><span style="display:flex;"><span>	visitorCfgs <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]VisitorConf,
+</span></span><span style="display:flex;"><span>	err <span style="color:#8be9fd">error</span>,
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> content []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	content, err = <span style="color:#50fa7b">GetRenderedConfFromFile</span>(filePath)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...</span>..
+</span></span><span style="display:flex;"><span>	cfg, err = <span style="color:#50fa7b">UnmarshalClientConfFromIni</span>(content)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...</span>..
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">// Parse all proxy and visitor configs.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	pxyCfgs, visitorCfgs, err = <span style="color:#50fa7b">LoadAllProxyConfsFromIni</span>(cfg.User, configBuffer.<span style="color:#50fa7b">Bytes</span>(), cfg.Start)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>主要流程是<code>GetRenderedConfFromFile</code>读取文件内容，<code>UnmarshalClientConfFromIni</code>负责对内容进行解析。</p>
+<p>首先是<code>GetRenderedConfFromFile</code>,主要是一个io的操作和对配置文件进行模板检测（<code>RenderContent</code>），很多frp配置文件改动都基于此(这里的<code>b</code>参数就是<code>frpc.ini</code>文件的源内容)。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">GetRenderedConfFromFile</span>(path <span style="color:#8be9fd">string</span>) (out []<span style="color:#8be9fd">byte</span>, err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> b []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	b, err = os.<span style="color:#50fa7b">ReadFile</span>(path)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	out, err = <span style="color:#50fa7b">RenderContent</span>(b)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>通过前面大概能得出解析过程</p>
+<pre tabindex="0"><code>sub.Execute() -&gt; rootCmd.Execute() -&gt; runClient(cfgFile) -&gt; config.ParseClientConfig(cfgFilePath) -&gt; GetRenderedConfFromFile(filePath) -&gt; UnmarshalClientConfFromIni(content)
+</code></pre><p>简单来说返回的就是把文件解析成一个<code>map</code>，通过自定义结构体来读取对应端口、ip协议。</p>
+<h5 id="客户端运行">客户端运行</h5>
+<p>前面说到客户端利用<code>startService</code>进行服务启动，跟进函数。这里我们只关注<code>cfgFile</code>参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">startService</span>(<span style="color:#ff79c6">...</span>.
+</span></span><span style="display:flex;"><span>  cfgFile <span style="color:#8be9fd">string</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> cfgFile <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;start frpc service for config file [%s]&#34;</span>, cfgFile)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">defer</span> log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;frpc service for config file [%s] stopped&#34;</span>, cfgFile)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	svr, errRet <span style="color:#ff79c6">:=</span> client.<span style="color:#50fa7b">NewService</span>(cfg, pxyCfgs, visitorCfgs, cfgFile)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">......</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>首先是对<code>cfgFile</code>进行存在判断，然后<code>client.NewService</code>启动服务。继续跟进</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">NewService</span>(<span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>	cfgFile <span style="color:#8be9fd">string</span>,
+</span></span><span style="display:flex;"><span>) (svr <span style="color:#ff79c6">*</span>Service, err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>	ctx, cancel <span style="color:#ff79c6">:=</span> context.<span style="color:#50fa7b">WithCancel</span>(context.<span style="color:#50fa7b">Background</span>())
+</span></span><span style="display:flex;"><span>	svr = <span style="color:#ff79c6">&amp;</span>Service{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>		cfgFile:     cfgFile,
+</span></span><span style="display:flex;"><span>		pxyCfgs:     pxyCfgs,
+</span></span><span style="display:flex;"><span>		visitorCfgs: visitorCfgs,
+</span></span><span style="display:flex;"><span>		exit:        <span style="color:#bd93f9">0</span>,
+</span></span><span style="display:flex;"><span>		ctx:         xlog.<span style="color:#50fa7b">NewContext</span>(ctx, xlog.<span style="color:#50fa7b">New</span>()),
+</span></span><span style="display:flex;"><span>		cancel:      cancel,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>发现<code>cfgFile</code>被指向<code>Service</code>的<code>cfgFile</code>，也就是<code>svr.cfgFile</code>。全局搜索一下被用于哪些地方。</p>
+<!-- raw HTML omitted -->
+<p>基本都源于<code>admin_api.go</code>。一处一处分析。</p>
+<p>1.<code>client/admin_api.go:56</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>_, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(svr.cfgFile)
+</span></span></code></pre></div><p>这部分是文件解析，上部分分析过。</p>
+<p>2.<code>client/admin_api.go:219</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">if</span> svr.cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		res.Code = <span style="color:#bd93f9">400</span>
+</span></span><span style="display:flex;"><span>		res.Msg = <span style="color:#f1fa8c">&#34;frpc has no config file path&#34;</span>
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Warn</span>(<span style="color:#f1fa8c">&#34;%s&#34;</span>, res.Msg)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>主要是对值存在与否进行判断。</p>
+<p>3.<code>client/admin_api.go:226</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>content, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">GetRenderedConfFromFile</span>(svr.cfgFile)
+</span></span></code></pre></div><p><code>GetRenderedConfFromFile</code>前面分析过。</p>
+<p>4.<code>client/admin_api.go:277</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>b, err <span style="color:#ff79c6">:=</span> os.<span style="color:#50fa7b">ReadFile</span>(svr.cfgFile)
+</span></span></code></pre></div><p>文件读取。</p>
+<p>5.<code>client/admin_api.go:316</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>err = os.<span style="color:#50fa7b">WriteFile</span>(svr.cfgFile, []<span style="color:#8be9fd;font-style:italic">byte</span>(content), <span style="color:#bd93f9">0</span>o644)
+</span></span></code></pre></div><p>向<code>svr.cfgFile</code>文件写入。</p>
+<p>综合前面几部分来看，三个函数用到了配置文件。</p>
+<p><code>apiReload</code>对配置文件进行加载。</p>
+<p><code>apiGetConfig</code>读取配置文件。</p>
+<p><code>apiPutConfig</code>函数对cfgFile进行判断，为空则写入配置文件模板。</p>
+<hr>
+<p>（客户端部分这里只分析了配置文件解析、使用相关过程，没有分析具体运行逻辑。</p>
+<h3 id="改动思路">改动思路</h3>
+<p>改动要求主要分为三部分。</p>
+<p>1.改动后之前的功能均可用。不破坏之前的功能。（比如<code>admin_api.go</code>。</p>
+<p>2.我们不需要配置文件。通过指定参数来满足基本要求。这里的想法是ip、server端口、remote端口以及tls值可控。</p>
+<p>3.参数不能是 <code>-i 192.xxx -p 1080</code>类型，需要对参数进行整体加密，如 <code>-ts [enc]</code>（比如aes密文网上公开的tips）。</p>
+<p>有了改动思路了我们就可以对代码进行浅改动了（顺便学习go。</p>
+<h3 id="代码实现部分">代码实现部分</h3>
+<p>首先是接收命令行部分<code>cmd/frpc/sub/root.go:79</code>,只需要给它加个参数即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>rootCmd.<span style="color:#50fa7b">PersistentFlags</span>().<span style="color:#50fa7b">StringVarP</span>(<span style="color:#ff79c6">&amp;</span>le3, <span style="color:#f1fa8c">&#34;config&#34;</span>, <span style="color:#f1fa8c">&#34;x&#34;</span>, <span style="color:#f1fa8c">&#34;[AES_Base64]&#34;</span>, <span style="color:#f1fa8c">&#34;xxx&#34;</span>)
+</span></span></code></pre></div><p>参数有了，下一步我们需要给他加进某个函数，这样才能解析我们的值。这里瞄准了<code>cmd/frpc/sub/root.go:133</code>部分，这也是一开始加载文件的地方。主要改动<code>runClient</code>的调用逻辑，通过前面能发现它被调用了两次，一次是传递的是<code>path</code>参数，一次传递的<code>cfgFile</code>参数，由于<code>cfgDir</code>默认为空，第一次调用我们可以不用改动。(代码可以参考配置文件分析部分)。</p>
+<p>由于它<code>runClient</code>只使用了<code>cfgFile</code>参数，这个参数是配置文件，所以它是必须参数。但我们改造完成后可以不使用它，所以我们修改这部分。</p>
+<p>这里思路是通过给<code>runClient</code>参数添加可变参数，在接收到le3参数时，忽略<code>cfgFile</code>参数。首先添加可变参数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">runClient</span>(cfgFilePath <span style="color:#8be9fd">string</span>, le3Hint <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	cfg, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(cfgFilePath, le3Hint<span style="color:#ff79c6">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> err
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#50fa7b">startService</span>(cfg, pxyCfgs, visitorCfgs, cfgFilePath)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>添加了然后在<code>root.go</code>修改逻辑。这里的<code>cfgFile</code>参数我们随便赋值即可，后面主要针对扩展参数进行处理。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>		<span style="color:#ff79c6">...</span>.
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span>) <span style="color:#ff79c6">&amp;&amp;</span> (le3 <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span>) {
+</span></span><span style="display:flex;"><span>			cfgFile = <span style="color:#f1fa8c">&#34;test&#34;</span>
+</span></span><span style="display:flex;"><span>			err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">runClient</span>(cfgFile, le3)
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>				fmt.<span style="color:#50fa7b">Println</span>(err)
+</span></span><span style="display:flex;"><span>				os.<span style="color:#50fa7b">Exit</span>(<span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// Do not show command usage here.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">runClient</span>(cfgFile)
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>				fmt.<span style="color:#50fa7b">Println</span>(err)
+</span></span><span style="display:flex;"><span>				os.<span style="color:#50fa7b">Exit</span>(<span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">......</span>
+</span></span></code></pre></div><p>然后是<code>runClient</code>函数，添加可选变量</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">runClient</span>(cfgFilePath <span style="color:#8be9fd">string</span>, le3Hint <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	cfg, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(cfgFilePath, le3Hint<span style="color:#ff79c6">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> err
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#50fa7b">startService</span>(cfg, pxyCfgs, visitorCfgs, cfgFilePath)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>发现除了<code>ParseClientConfig</code>，<code>startService</code>也使用了<code>cfgFilePath</code>参数。接下来是对扩展参数的解析。</p>
+<p>由于我们传入是AES的密文，需要对明/密文进行加/解密，这里同样使用map来作为传递参数的明文。也就是通过AES来加密我们的map作为传递参数。</p>
+<p><code>map</code>可以算是golang的<code>json</code>，类型是键值对。</p>
+<p>先写<code>AES</code>加/解密（其实只用解密即可）,参考https://juejin.cn/post/6953493716078166030</p>
+<p>把加/解密写在<code>pkg/config/utils.go:55</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">......</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">PKCS7Padding</span>(text []<span style="color:#8be9fd">byte</span>, blockSize <span style="color:#8be9fd">int</span>) []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">//PKCS7填充
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	padding <span style="color:#ff79c6">:=</span> blockSize <span style="color:#ff79c6">-</span> <span style="color:#8be9fd;font-style:italic">len</span>(text)<span style="color:#ff79c6">%</span>blockSize
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> padText []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> padding <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		padText = bytes.<span style="color:#50fa7b">Repeat</span>([]<span style="color:#8be9fd">byte</span>{<span style="color:#8be9fd;font-style:italic">byte</span>(blockSize)}, blockSize)
+</span></span><span style="display:flex;"><span>	} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>		padText = bytes.<span style="color:#50fa7b">Repeat</span>([]<span style="color:#8be9fd">byte</span>{<span style="color:#8be9fd;font-style:italic">byte</span>(padding)}, padding)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">append</span>(text, padText<span style="color:#ff79c6">...</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">UnPKCS7Padding</span>(text []<span style="color:#8be9fd">byte</span>) []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">//PKCS7去除
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	unPadding <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">int</span>(text[<span style="color:#8be9fd;font-style:italic">len</span>(text)<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>])
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> text[:<span style="color:#8be9fd;font-style:italic">len</span>(text)<span style="color:#ff79c6">-</span>unPadding]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">AesCbcEncrypt</span>(text, key, iv []<span style="color:#8be9fd">byte</span>) []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>	block, err <span style="color:#ff79c6">:=</span> aes.<span style="color:#50fa7b">NewCipher</span>(key)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	padText <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">PKCS7Padding</span>(text, block.<span style="color:#50fa7b">BlockSize</span>())
+</span></span><span style="display:flex;"><span>	blockMode <span style="color:#ff79c6">:=</span> cipher.<span style="color:#50fa7b">NewCBCEncrypter</span>(block, iv)
+</span></span><span style="display:flex;"><span>	result <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd;font-style:italic">len</span>(padText))
+</span></span><span style="display:flex;"><span>	blockMode.<span style="color:#50fa7b">CryptBlocks</span>(result, padText)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> result
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">AesCbcDecrypt</span>(enc, key, iv []<span style="color:#8be9fd">byte</span>) []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>	block, err <span style="color:#ff79c6">:=</span> aes.<span style="color:#50fa7b">NewCipher</span>(key)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	blockMode <span style="color:#ff79c6">:=</span> cipher.<span style="color:#50fa7b">NewCBCDecrypter</span>(block, iv)
+</span></span><span style="display:flex;"><span>	result <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd;font-style:italic">len</span>(enc))
+</span></span><span style="display:flex;"><span>	blockMode.<span style="color:#50fa7b">CryptBlocks</span>(result, enc)
+</span></span><span style="display:flex;"><span>	result = <span style="color:#50fa7b">UnPKCS7Padding</span>(result)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> result
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们传入的格式是<code>[AES_Base64]</code>密文，我们可以先生成需要传入的密文。待加密的数据如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">&#34;ip&#34;</span>:  <span style="color:#f1fa8c">&#34;192.168.1.1&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">&#34;port&#34;</span>: <span style="color:#f1fa8c">&#34;8088&#34;</span>,
+</span></span><span style="display:flex;"><span>  	<span style="color:#ff79c6">&#34;rePort&#34;</span>: <span style="color:#f1fa8c">&#34;9999&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">&#34;tls&#34;</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>用map进行传递加密。iv和key可以自己定义</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>le3 <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]<span style="color:#8be9fd">string</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#34;ip&#34;</span>:     <span style="color:#f1fa8c">&#34;192.168.1.1&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#34;port&#34;</span>:   <span style="color:#f1fa8c">&#34;8088&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#34;rePort&#34;</span>: <span style="color:#f1fa8c">&#34;9999&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#f1fa8c">&#34;tls&#34;</span>:    <span style="color:#f1fa8c">&#34;true&#34;</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	iv, key <span style="color:#ff79c6">:=</span> []<span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#f1fa8c">&#34;16195aa289b57e22&#34;</span>), []<span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#f1fa8c">&#34;8a23be48f0983bfe&#34;</span>)
+</span></span><span style="display:flex;"><span>	enc, _ <span style="color:#ff79c6">:=</span> json.<span style="color:#50fa7b">Marshal</span>(le3)
+</span></span><span style="display:flex;"><span>	res <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">AesCbcEncrypt</span>(enc, key, iv)
+</span></span><span style="display:flex;"><span>	fmt.<span style="color:#50fa7b">Println</span>(base64.StdEncoding.<span style="color:#50fa7b">EncodeToString</span>(res))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//Kiqh2Qs/364peWaYPfkYYBeX1hyH3oi/US3S+SLhBBIhWmXlpyQV1tLFf1XDqsS2bSSlOGq3b0RU1iNViiMagw==
+</span></span></span></code></pre></div><p>这是命令行传递的参数，我们需要在frp内部进行解密</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>dec <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">AesCbcDecrypt</span>(res, key, iv)
+</span></span><span style="display:flex;"><span>	tmp <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]<span style="color:#8be9fd">string</span>{}
+</span></span><span style="display:flex;"><span>	err = json.<span style="color:#50fa7b">Unmarshal</span>(dec, <span style="color:#ff79c6">&amp;</span>tmp)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	fmt.<span style="color:#50fa7b">Println</span>(tmp)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//map[ip:192.168.1.1 port:8088 rePort:9999 tls:true]
+</span></span></span></code></pre></div><p>取值的话用对应键值即可。获取完参数后就可以继续对<code>ParseClientConfig</code>进行修改了。<del>通过简单if/else对<code>content</code>内容进行截取，最终重写函数内容为</del>后面发现修改<code>GetRenderedConfFromFile</code>会解决后面的问题。添加可选参数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">GetRenderedConfFromFile</span>(path <span style="color:#8be9fd">string</span>, l3content <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>) (out []<span style="color:#8be9fd">byte</span>, err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> b []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> path <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> l3content[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		b, err = os.<span style="color:#50fa7b">ReadFile</span>(path)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>		rand.<span style="color:#50fa7b">Seed</span>(time.<span style="color:#50fa7b">Now</span>().<span style="color:#50fa7b">UTC</span>().<span style="color:#50fa7b">UnixNano</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">var</span> randStr <span style="color:#8be9fd">string</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>; i &lt; <span style="color:#bd93f9">6</span>; i<span style="color:#ff79c6">++</span> {
+</span></span><span style="display:flex;"><span>			num <span style="color:#ff79c6">:=</span> rand.<span style="color:#50fa7b">Intn</span>(<span style="color:#bd93f9">10</span>)
+</span></span><span style="display:flex;"><span>			randStr <span style="color:#ff79c6">+=</span> strconv.<span style="color:#50fa7b">Itoa</span>(num)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		iv, key <span style="color:#ff79c6">:=</span> []<span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#f1fa8c">&#34;16195aa289b57e22&#34;</span>), []<span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#f1fa8c">&#34;8a23be48f0983bfe&#34;</span>)
+</span></span><span style="display:flex;"><span>		encAes, _ <span style="color:#ff79c6">:=</span> base64.StdEncoding.<span style="color:#50fa7b">DecodeString</span>(l3content[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>		dec <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">AesCbcDecrypt</span>(encAes, key, iv)
+</span></span><span style="display:flex;"><span>		newCfgMap <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]<span style="color:#8be9fd">string</span>{}
+</span></span><span style="display:flex;"><span>		err = json.<span style="color:#50fa7b">Unmarshal</span>(dec, <span style="color:#ff79c6">&amp;</span>newCfgMap)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>			fmt.<span style="color:#50fa7b">Println</span>(err)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		newIp <span style="color:#ff79c6">:=</span> newCfgMap[<span style="color:#f1fa8c">&#34;ip&#34;</span>]
+</span></span><span style="display:flex;"><span>		newPort <span style="color:#ff79c6">:=</span> newCfgMap[<span style="color:#f1fa8c">&#34;port&#34;</span>]
+</span></span><span style="display:flex;"><span>		tlsBool <span style="color:#ff79c6">:=</span> newCfgMap[<span style="color:#f1fa8c">&#34;tls&#34;</span>]
+</span></span><span style="display:flex;"><span>		RePort <span style="color:#ff79c6">:=</span> newCfgMap[<span style="color:#f1fa8c">&#34;rePort&#34;</span>]
+</span></span><span style="display:flex;"><span>		b = []<span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#f1fa8c">`[common]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		server_addr = `</span> <span style="color:#ff79c6">+</span> newIp <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		server_port = `</span> <span style="color:#ff79c6">+</span> newPort <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		tls_enable = `</span> <span style="color:#ff79c6">+</span> tlsBool <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		[`</span> <span style="color:#ff79c6">+</span> randStr <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">`]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		type = tcp
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		remote_port = `</span> <span style="color:#ff79c6">+</span> RePort <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">`
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">		plugin = socks5`</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	out, err = <span style="color:#50fa7b">RenderContent</span>(b)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然后返回来修改<code>ParseClientConfig</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">ParseClientConfig</span>(filePath <span style="color:#8be9fd">string</span>, l3content <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>) (
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">...</span>..
+</span></span><span style="display:flex;"><span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> content []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> filePath <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> l3content[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		content, err = <span style="color:#50fa7b">GetRenderedConfFromFile</span>(filePath, l3content[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>	} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>		content, err = <span style="color:#50fa7b">GetRenderedConfFromFile</span>(filePath)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...............</span>.
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>到这解析基本完成。</p>
+<p>但前面<code>startService</code>也调用了基础配置文件内容，前面分析过相关过程。主要是针对调用<code>svg.cfgFile</code>的几部分做修改。也就是<code>client/service.go</code>和<code>client/admin_api.go</code>部分。当然，入口处也需要更改。首先给<code>startService</code>增加可选参数。</p>
+<p><code>cmd/frpc/sub/root.go</code></p>
+<p>主要是<code>runClient</code>和<code>startservice</code>函数部分。加点简单if/else就行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">runClient</span>(cfgFilePath <span style="color:#8be9fd">string</span>, le3Hint <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>) <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	cfg, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(cfgFilePath, le3Hint<span style="color:#ff79c6">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> err
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">len</span>(le3Hint) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#50fa7b">startService</span>(cfg, pxyCfgs, visitorCfgs, cfgFilePath, le3Hint[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#50fa7b">startService</span>(cfg, pxyCfgs, visitorCfgs, cfgFilePath)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">startService</span>(
+</span></span><span style="display:flex;"><span>	cfg config.ClientCommonConf,
+</span></span><span style="display:flex;"><span>	pxyCfgs <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]config.ProxyConf,
+</span></span><span style="display:flex;"><span>	visitorCfgs <span style="color:#8be9fd;font-style:italic">map</span>[<span style="color:#8be9fd">string</span>]config.VisitorConf,
+</span></span><span style="display:flex;"><span>	cfgFile <span style="color:#8be9fd">string</span>,
+</span></span><span style="display:flex;"><span>	le3 <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>,
+</span></span><span style="display:flex;"><span>) (err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>	log.<span style="color:#50fa7b">InitLog</span>(cfg.LogWay, cfg.LogFile, cfg.LogLevel,
+</span></span><span style="display:flex;"><span>		cfg.LogMaxDays, cfg.DisableLogColor)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> cfgFile <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;start frpc service for config file [%s]&#34;</span>, cfgFile)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">defer</span> log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;frpc service for config file [%s] stopped&#34;</span>, cfgFile)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(le3) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;start frpc service for le3&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">defer</span> log.<span style="color:#50fa7b">Trace</span>(<span style="color:#f1fa8c">&#34;frpc service for le3 stopped&#34;</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">......</span>
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><p>然后是<code>client.NewService</code>对<code>cfgFile</code>的调用，利用之前的方法，依然添加可选参数，处理<code>runClient</code>传入的可选参数。由于<code>NewService</code>中处理相关变量用到了结构体，所以我们需要在<code>Service</code>结构体添加。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> Service <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">.........</span>..
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">//other var
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	le3 []<span style="color:#8be9fd">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">.........</span>.
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然后添加可选参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">NewService</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">......</span>
+</span></span><span style="display:flex;"><span>	cfgFile <span style="color:#8be9fd">string</span>,
+</span></span><span style="display:flex;"><span>	le3 <span style="color:#ff79c6">...</span><span style="color:#8be9fd">string</span>,
+</span></span><span style="display:flex;"><span>) (svr <span style="color:#ff79c6">*</span>Service, err <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>	ctx, cancel <span style="color:#ff79c6">:=</span> context.<span style="color:#50fa7b">WithCancel</span>(context.<span style="color:#50fa7b">Background</span>())
+</span></span><span style="display:flex;"><span>	svr = <span style="color:#ff79c6">&amp;</span>Service{
+</span></span><span style="display:flex;"><span>		authSetter:  auth.<span style="color:#50fa7b">NewAuthSetter</span>(cfg.ClientConfig),
+</span></span><span style="display:flex;"><span>		cfg:         cfg,
+</span></span><span style="display:flex;"><span>		cfgFile:     cfgFile,
+</span></span><span style="display:flex;"><span>		le3:         le3,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">......</span>..
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>跟着前面的分析思路。<code>Service</code>结构体指针指向了<code>svr</code>，所以我们还需要修改<code>svr.cfgFile</code>相关部分。也就是<code>admin_api.go</code>部分。</p>
+<p>对第一处，<code>apiReload</code>函数相关部分进行改动。</p>
+<p><code>client/admin_api.go:55</code>,记得添加if/else判断</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	_, pxyCfgs, visitorCfgs, err <span style="color:#ff79c6">:=</span> config.<span style="color:#50fa7b">ParseClientConfig</span>(svr.cfgFile)
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(svr.le3) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		_, pxyCfgs, visitorCfgs, err = config.<span style="color:#50fa7b">ParseClientConfig</span>(svr.cfgFile, svr.le3[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>然后是<code>apiGetConfig</code>函数部分。还是简单if/else</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> (svr <span style="color:#ff79c6">*</span>Service) <span style="color:#50fa7b">apiGetConfig</span>(w http.ResponseWriter, r <span style="color:#ff79c6">*</span>http.Request) {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">...</span>..
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> svr.cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">len</span>(svr.le3) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		res.Code = <span style="color:#bd93f9">400</span>
+</span></span><span style="display:flex;"><span>		res.Msg = <span style="color:#f1fa8c">&#34;frpc has no config file path &amp;&amp; not le3&#34;</span>
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Warn</span>(<span style="color:#f1fa8c">&#34;%s&#34;</span>, res.Msg)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> content []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">var</span> err <span style="color:#8be9fd">error</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> svr.cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">len</span>(svr.le3) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>		content, err = config.<span style="color:#50fa7b">GetRenderedConfFromFile</span>(svr.cfgFile, svr.le3)
+</span></span><span style="display:flex;"><span>	} <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>		content, err = config.<span style="color:#50fa7b">GetRenderedConfFromFile</span>(svr.cfgFile)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>		res.Code = <span style="color:#bd93f9">400</span>
+</span></span><span style="display:flex;"><span>		res.Msg = err.<span style="color:#50fa7b">Error</span>()
+</span></span><span style="display:flex;"><span>		log.<span style="color:#50fa7b">Warn</span>(<span style="color:#f1fa8c">&#34;load frpc and le3 config file error: %s &#34;</span>, res.Msg)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">.........</span>.
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>最后是<code>apiPutConfig</code>，由于他是直接读、写配置文件内容，且属于控制面版功能。对于无文件来说，暂不考虑这个问题。直接对无文件进行判断。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> svr.cfgFile <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> svr.le3 <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>代码到这里就实现完成了。</p>
+<p>最终大概就是。</p>
+<p><strong>配置文件</strong></p>
+<!-- raw HTML omitted -->
+<p><strong>指定参数</strong></p>
+<!-- raw HTML omitted -->
+
+        </p>
+    </div>
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#前言">前言</a></li>
+            <li><a href="#加载逻辑分析">加载逻辑分析</a>
+              <ul>
+                <li></li>
+              </ul>
+            </li>
+            <li><a href="#改动思路">改动思路</a></li>
+            <li><a href="#代码实现部分">代码实现部分</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    <span>&copy; 2022 le3&#39;s blog</span>
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>

@@ -2,19 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://nullarray.top/tags/frp/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
+    <loc>https://nullarray.top/posts/frp/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
+    <loc>https://nullarray.top/tags/golang/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
+    <loc>https://nullarray.top/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
+    <loc>https://nullarray.top/posts/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
+    <loc>https://nullarray.top/tags/</loc>
+    <lastmod>2022-11-22T21:13:01+00:00</lastmod>
+  </url><url>
     <loc>https://nullarray.top/posts/ciscn-web-filter/</loc>
     <lastmod>2021-05-25T21:20:21+00:00</lastmod>
   </url><url>
-    <loc>https://nullarray.top/</loc>
-    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
-  </url><url>
-    <loc>https://nullarray.top/posts/</loc>
-    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
-  </url><url>
     <loc>https://nullarray.top/tags/rce/</loc>
-    <lastmod>2021-05-25T21:20:21+00:00</lastmod>
-  </url><url>
-    <loc>https://nullarray.top/tags/</loc>
     <lastmod>2021-05-25T21:20:21+00:00</lastmod>
   </url><url>
     <loc>https://nullarray.top/tags/yii2/</loc>
