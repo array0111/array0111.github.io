@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>CTF - 分类 - ?___?</title>
+    <link>http://example.org/categories/ctf/</link>
+    <description>CTF - 分类 - ?___?</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 25 May 2021 21:20:21 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/ctf/" rel="self" type="application/rss+xml" /><item>
+  <title>CISCN_web_filter</title>
+  <link>http://example.org/posts/ciscn-web-filter/</link>
+  <pubDate>Tue, 25 May 2021 21:20:21 &#43;0000</pubDate>
+  <author>le3teq</author>
+  <guid>http://example.org/posts/ciscn-web-filter/</guid>
+  <description><![CDATA[<div class="featured-image">
+        <img src="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png" referrerpolicy="no-referrer">
+      </div><p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>]]></description>
+</item>
+</channel>
+</rss>

@@ -1,29 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
-    <title>Posts on le3teq&#39;s Blog</title>
-    <link>https://nullarray.top/posts/</link>
-    <description>Recent content in Posts on le3teq&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <lastBuildDate>Tue, 22 Nov 2022 21:13:01 +0000</lastBuildDate><atom:link href="https://nullarray.top/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>frp浅改记录</title>
-      <link>https://nullarray.top/posts/frp/</link>
-      <pubDate>Tue, 22 Nov 2022 21:13:01 +0000</pubDate>
-      
-      <guid>https://nullarray.top/posts/frp/</guid>
-      <description>简单修改frp</description>
-    </item>
-    
-    <item>
-      <title>CISCN_web_filter</title>
-      <link>https://nullarray.top/posts/ciscn-web-filter/</link>
-      <pubDate>Tue, 25 May 2021 21:20:21 +0000</pubDate>
-      
-      <guid>https://nullarray.top/posts/ciscn-web-filter/</guid>
-      <description>通过国赛一道题来学习phar反序列化写日志到RCE</description>
-    </item>
-    
-  </channel>
+    <title>所有文章 - ?___?</title>
+    <link>http://example.org/posts/</link>
+    <description>所有文章 | ?___?</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 22 Dec 2022 21:13:01 &#43;0000</lastBuildDate><atom:link href="http://example.org/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>frp浅改记录</title>
+  <link>http://example.org/posts/frp/</link>
+  <pubDate>Thu, 22 Dec 2022 21:13:01 &#43;0000</pubDate>
+  <author>le3teq</author>
+  <guid>http://example.org/posts/frp/</guid>
+  <description><![CDATA[<div class="featured-image">
+        <img src="https://s2.loli.net/2022/12/21/q7BNuCyn3O1a2Gb.png" referrerpolicy="no-referrer">
+      </div><p>frp改造已经有很多了，一开始用的@unknownsec师傅的modify，由于一些版本及其他一些原因，打算自己研究研究。</p>]]></description>
+</item>
+<item>
+  <title>CISCN_web_filter</title>
+  <link>http://example.org/posts/ciscn-web-filter/</link>
+  <pubDate>Tue, 25 May 2021 21:20:21 &#43;0000</pubDate>
+  <author>le3teq</author>
+  <guid>http://example.org/posts/ciscn-web-filter/</guid>
+  <description><![CDATA[<div class="featured-image">
+        <img src="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png" referrerpolicy="no-referrer">
+      </div><p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>]]></description>
+</item>
+</channel>
 </rss>

@@ -1,20 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
-    <title>frp on le3teq&#39;s Blog</title>
-    <link>https://nullarray.top/tags/frp/</link>
-    <description>Recent content in frp on le3teq&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <lastBuildDate>Tue, 22 Nov 2022 21:13:01 +0000</lastBuildDate><atom:link href="https://nullarray.top/tags/frp/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>frp浅改记录</title>
-      <link>https://nullarray.top/posts/frp/</link>
-      <pubDate>Tue, 22 Nov 2022 21:13:01 +0000</pubDate>
-      
-      <guid>https://nullarray.top/posts/frp/</guid>
-      <description>简单修改frp</description>
-    </item>
-    
-  </channel>
+    <title>frp - 标签 - ?___?</title>
+    <link>http://example.org/tags/frp/</link>
+    <description>frp - 标签 - ?___?</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 22 Dec 2022 21:13:01 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/frp/" rel="self" type="application/rss+xml" /><item>
+  <title>frp浅改记录</title>
+  <link>http://example.org/posts/frp/</link>
+  <pubDate>Thu, 22 Dec 2022 21:13:01 &#43;0000</pubDate>
+  <author>le3teq</author>
+  <guid>http://example.org/posts/frp/</guid>
+  <description><![CDATA[<div class="featured-image">
+        <img src="https://s2.loli.net/2022/12/21/q7BNuCyn3O1a2Gb.png" referrerpolicy="no-referrer">
+      </div><p>frp改造已经有很多了，一开始用的@unknownsec师傅的modify，由于一些版本及其他一些原因，打算自己研究研究。</p>]]></description>
+</item>
+</channel>
 </rss>

