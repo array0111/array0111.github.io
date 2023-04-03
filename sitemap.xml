@@ -19,4 +19,7 @@
       <loc>http://example.org/categories/ctf/</loc><lastmod>2021-05-25T21:20:21&#43;00:00</lastmod></url><url>
       <loc>http://example.org/tags/rce/</loc><lastmod>2021-05-25T21:20:21&#43;00:00</lastmod></url><url>
       <loc>http://example.org/tags/yii2/</loc><lastmod>2021-05-25T21:20:21&#43;00:00</lastmod></url><url>
-      <loc>http://example.org/search/</loc></url></urlset>
+      <loc>http://example.org/tags/ctf/</loc></url><url>
+      <loc>http://example.org/search/</loc></url><url>
+      <loc>http://example.org/tags/sqlite/</loc></url><url>
+      <loc>http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/</loc></url></urlset>

